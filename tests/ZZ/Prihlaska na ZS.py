@@ -173,11 +173,7 @@ def test_prihlaska_na_ZS(page: Page, person_data) -> None:
         "V súhrne príloh sa nezobrazila informácia o nenahratých prílohách."
     ).to_contain_text("Neboli nahrané žiadne prílohy.")
 
-    page.locator("#cestnePrehlasenie > .checkmark").click()
-    page.locator("#suhlasOsobneUdaje > .checkmark").click()
-
-    page.get_by_role("button", name="Odoslať prihlášku").click()
-    page.get_by_role("button", name="Odoslať prihlášku").nth(1).click()
+    prihlaska.accept_terms_and_submit()
 
     expect(
         page,
@@ -189,7 +185,7 @@ def test_prihlaska_na_ZS(page: Page, person_data) -> None:
         "Na potvrdení odoslania sa nezobrazil úspešný nadpis."
     ).to_contain_text("Prihláška bola úspešne odoslaná!")
 
-    page.get_by_role("button", name="Prejsť na prihlášky").click()
+    prihlaska.click_on_prejst_na_prihlasky()
     logout.logout()
 
     login.login_as_riaditel(username_riad, password_riad, "910021625")

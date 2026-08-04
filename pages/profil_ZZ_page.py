@@ -36,7 +36,10 @@ class ProfilZZ(BasePage):
         )
 
     def click_on_ulozit_zmeny(self):
-        self.page.locator("button").filter(has_text="Uložiť zmeny").first.click(),
+        self._safe_click(
+            self.page.locator("button").filter(has_text="Uložiť zmeny").first,
+            "Uložiť zmeny"
+        )
 
     def zmenit_mail(self, mail: str):
         self._safe_click(

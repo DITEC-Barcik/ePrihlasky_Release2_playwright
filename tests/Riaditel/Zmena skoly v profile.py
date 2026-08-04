@@ -6,6 +6,7 @@ from pages.login_page import LoginPage
 from pages.profil_page import ProfilPage
 
 
+
 username = os.getenv("EPRIHLASKY_RIADITEL_USERNAME")
 password = os.getenv("EPRIHLASKY_RIADITEL_PASSWORD")
 
@@ -14,11 +15,8 @@ def _expect_text(locator, text: str, message: str) -> None:
     expect(locator, message).to_contain_text(text)
 
 
-def _change_school(page: Page, school_name: str) -> None:
-    school_input = page.get_by_role("textbox", name="Škola *")
-    school_input.click()
-    page.get_by_text(school_name, exact=True).click()
-    page.get_by_role("button", name="Zmeniť školu").click()
+def _change_school(profil: ProfilPage, school_name: str) -> None:
+    profil.change_school(school_name)
 
 
 def _expect_profile_school(page: Page, school_name: str) -> None:
@@ -48,10 +46,10 @@ def test_zmena_skoly_profil_riaditela(page: Page) -> None:
 
     _expect_profile_school(page, "Materská škola pre AT")
 
-    _change_school(page, "Stredná škola pre AT")
+    _change_school(profil, "Stredná škola pre AT")
     _expect_profile_school(page, "Stredná škola pre AT")
     _expect_banner_school(page, "Stredná škola pre AT", "910021624")
 
-    _change_school(page, "Základná škola pre AT")
+    _change_school(profil, "Základná škola pre AT")
     _expect_profile_school(page, "Základná škola pre AT")
     _expect_banner_school(page, "Základná škola pre AT", "910021625")

@@ -243,7 +243,7 @@ def test_doplnenie_prilohy_na_SS_2_kolo(page: Page) -> None:
         f"dokumenty na základe predchádzajúceho odkazu, upozorňujeme, že tento odkaz je už neaktívny. V prípade akýchkoľvek "
         f"otázok nás neváhajte kontaktovať. S pozdravom Tím elektronických prihlášok MŠVVaM SR Tento email bol generovaný "
         f"automaticky portálom Elektronické prihlášky do škôl, ktorý je v správe Ministerstva školstva, výskumu, vývoja a mládeže "
-        f"Slovenskej republiky. Neodpovedajte naň."
+        f"Slovenskej republiky. Neodpovedajte naň.\""
     )
     _assert_equal(odvolanie_prilohy, expected_odvolanie, "Obsah e-mailu o odvolaní žiadosti o prílohu nezodpovedá očakávaniu.")
 
@@ -285,7 +285,7 @@ def test_doplnenie_prilohy_na_SS_2_kolo(page: Page) -> None:
         f"v detaile prihlášky, alebo v prílohe tohto mailu. Prihlásením sa na portáli zároveň získate aj ďalšie informácie o stave "
         f"Vašej prihlášky a priebehu jej spracovania. Link na prihlásenie S pozdravom Tím elektronických prihlášok MŠVVaM SR Tento email "
         f"bol generovaný automaticky portálom Elektronické prihlášky do škôl, ktorý je v správe Ministerstva školstva, výskumu, vývoja a mládeže "
-        f"Slovenskej republiky. Neodpovedajte naň."
+        f"Slovenskej republiky. Neodpovedajte naň.\""
     )
     _assert_equal(prijatie_prilohy, expected_prijatie, "Obsah e-mailu o prijatej prílohe nezodpovedá očakávaniu.")
 

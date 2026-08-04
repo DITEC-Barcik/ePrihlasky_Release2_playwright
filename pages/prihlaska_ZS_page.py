@@ -200,3 +200,27 @@ class PrihlaskaZS(BasePage):
 
     def step_5_prilohy(self):
         self._click_dalej("Ďalej - krok prílohy")
+
+    def accept_terms_and_submit(self):
+        self._safe_click(
+            self.page.locator("#cestnePrehlasenie > .checkmark"),
+            "Čestné prehlásenie"
+        )
+        self._safe_click(
+            self.page.locator("#suhlasOsobneUdaje > .checkmark"),
+            "Súhlas s osobnými údajmi"
+        )
+        self._safe_click(
+            self.page.get_by_role("button", name="Odoslať prihlášku"),
+            "Odoslať prihlášku"
+        )
+        self._safe_click(
+            self.page.get_by_role("button", name="Odoslať prihlášku").nth(1),
+            "Potvrdiť odoslanie prihlášky"
+        )
+
+    def click_on_prejst_na_prihlasky(self):
+        self._safe_click(
+            self.page.get_by_role("button", name="Prejsť na prihlášky"),
+            "Prejsť na prihlášky"
+        )

@@ -68,6 +68,20 @@ class ProfilPage(BasePage):
         self.page.wait_for_load_state("networkidle")
         self.page.wait_for_timeout(5000)
 
+    def change_school(self, school_name: str):
+        self._safe_click(
+            self.page.get_by_role("textbox", name="Škola *"),
+            "Škola"
+        )
+        self._safe_click(
+            self.page.get_by_text(school_name, exact=True),
+            f"Škola - {school_name}"
+        )
+        self._safe_click(
+            self.page.get_by_role("button", name="Zmeniť školu"),
+            "Zmeniť školu"
+        )
+
     def get_email_riaditela(self) -> str:
         try:
             locator = self.page.locator("#profil-riaditel-mail")
