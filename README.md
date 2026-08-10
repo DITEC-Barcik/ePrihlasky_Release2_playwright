@@ -10,13 +10,14 @@ End-to-end regression tests for the [ePrihlášky](https://test-eprihlasky.iedu.
 tests/
 ├── Riaditel/               # Tests for the Riaditeľ (principal) role
 │   ├── SpravaPouzivatelov/ # User management
-│   └── ...
-├── VerejnaZona/            # Tests for the public zone
+│   └── ...                 # Rozhodnutia, Prijímačky, Správa školy, Odbory, Profil
+├── VerejnaZona/            # Tests for the public zone (Kontrola škôl)
 └── ZZ/                     # Tests for the Zákonný zástupca (guardian) role
 pages/                      # Page Object Model classes
 fixtures/                   # Shared test fixtures
 utils/                      # Helper utilities
 data/                       # Test data files
+conftest.py                 # Session fixtures, browser config, base URL setup
 ```
 
 ---
@@ -47,7 +48,10 @@ Create a `.env` file in the project root (or set variables in CI):
 | `EPRIHLASKY_SEC_RIADITEL_PASSWORD` | Secondary riaditeľ password |
 | `EPRIHLASKY_ZZ_USERNAME` | Zákonný zástupca username |
 | `EPRIHLASKY_ZZ_PASSWORD` | Zákonný zástupca password |
-| `EPRIHLASKY_TEST_URL` | Target application URL |
+| `EPRIHLASKY_TEST_URL` | Test environment URL (default: `https://test-eprihlasky.iedu.sk/`) |
+| `EPRIHLASKY_LOCAL_URL` | Local environment URL (default: `http://localhost:3000`) |
+| `EPRIHLASKY_STAGE_URL` | Stage environment URL |
+| `EPRIHLASKY_PROD_URL` | Production environment URL |
 | `GMAIL_USERNAME` | Gmail address for email verification |
 | `GMAIL_APP_PASSWORD` | Gmail app password |
 | `GMAIL_SEC_USERNAME` | Secondary Gmail address |
@@ -91,10 +95,7 @@ pytest --env test --base-url https://test-eprihlasky.iedu.sk/
 |---|---|
 | `regres1kolo` | Regression suite for 1st admission round |
 | `regres2kolo` | Regression suite for 2nd admission round |
-| `smoke` | Smoke tests |
 | `spravaSkoly` | School profile management tests |
-| `profil` | Principal / user profile tests |
-| `prihlaskaRiaditel` | Paper application created by principal |
 
 ---
 
