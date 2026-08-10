@@ -49,7 +49,6 @@ Create a `.env` file in the project root (or set variables in CI):
 | `EPRIHLASKY_ZZ_USERNAME` | Zákonný zástupca username |
 | `EPRIHLASKY_ZZ_PASSWORD` | Zákonný zástupca password |
 | `EPRIHLASKY_TEST_URL` | Test environment URL (default: `https://test-eprihlasky.iedu.sk/`) |
-| `EPRIHLASKY_LOCAL_URL` | Local environment URL (default: `http://localhost:3000`) |
 | `EPRIHLASKY_STAGE_URL` | Stage environment URL |
 | `EPRIHLASKY_PROD_URL` | Production environment URL |
 | `GMAIL_USERNAME` | Gmail address for email verification |
