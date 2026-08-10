@@ -12,7 +12,7 @@ password = os.getenv("EPRIHLASKY_ZZ_PASSWORD")
 
 @pytest.mark.regres1kolo
 @pytest.mark.regres2kolo
-def test_example(page: Page) -> None:
+def test_vyveska_MS(page: Page) -> None:
     login = LoginPage(page)
     logout = LogoutPage(page)
     vyveska = VyveskaMS(page)
