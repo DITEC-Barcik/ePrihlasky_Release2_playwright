@@ -122,6 +122,6 @@ def test_pridanie_papierovej_prihlasky_MS(page: Page) -> None:
 
     prihlaska.najdi_prihlasku(data.meno, data.priezvisko)
     _expect_visible(page.get_by_text("P-2026-"), "Nenašiel sa identifikátor prihlášky.")
-    #_expect_visible(page.get_by_text("Podaná").first, "Nenašiel sa stav Podaná.") #zalezi od konfigu ci bude Podaná alebo V spracovaní
-    _expect_visible(page.get_by_text("V spracovaní").first, "Nenašiel sa stav V spracovaní.")
+    # stav zavisi od konfiguracie prostredia
+    _expect_visible(page.get_by_text(re.compile(r"Podaná|V spracovaní")).first, "Nenašiel sa stav Podaná ani V spracovaní.")
     _expect_visible(page.get_by_text("Papierovo"), "Nenašiel sa spôsob podania Papierovo.")

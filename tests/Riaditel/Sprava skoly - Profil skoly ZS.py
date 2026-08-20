@@ -153,7 +153,7 @@ def test_profil_skoly_ZS(page: Page) -> None:
     _open_public_zs_profile(verejna_zona)
     _expect_zs_public_profile_first_version(page)
 
-    page.get_by_role("button", name="Zavrieť").click()
+    page.locator("button").filter(has_text="Zavrieť").last.click()
 
     _update_zs_school_profile_second_version(page, login_page, sprava_skoly)
     logout_page.logout()

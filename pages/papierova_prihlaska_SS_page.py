@@ -128,7 +128,7 @@ class PapierovaPrihlaskaSS(BasePage):
         )
 
         self._safe_fill(
-            self.page.locator("#adresaTPKrajina > .govuk-form-group > .input-wrapper > .govuk-input.autocomplete-input"),
+            self.page.locator("#adresaTPKrajina input.autocomplete-input"),
             self.KRAJINA,
             "Krajina"
         )
@@ -138,22 +138,22 @@ class PapierovaPrihlaskaSS(BasePage):
         )
 
         self._safe_fill(
-            self.page.locator("#adresaTPObec > .govuk-form-group > .input-wrapper > .govuk-input.autocomplete-input"),
+            self.page.locator("#adresaTPObec input.autocomplete-input"),
             self.OBEC,
             "Obec"
         )
         self._safe_click(
-            self.page.get_by_text(self.OBEC_LABEL),
+            self.page.locator("#adresaTPObec").get_by_text(self.OBEC_LABEL, exact=True),
             "Palín (Michalovce)"
         )
 
         self._safe_fill(
-            self.page.get_by_role("textbox", name="Krajina *"),
+            self.page.locator("#adresaTPUlica input.autocomplete-input"),
             self.ULICA,
             "Ulica"
         )
         self._safe_click(
-            self.page.get_by_text(self.ULICA_LABEL),
+            self.page.locator("#adresaTPUlica").get_by_text(self.ULICA_LABEL, exact=True),
             "Korčekova"
         )
 

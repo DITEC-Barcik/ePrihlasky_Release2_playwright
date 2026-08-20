@@ -119,7 +119,7 @@ def test_profil_skoly_MS(page: Page) -> None:
     )
     _expect_public_profile_ms_version_1(page)
 
-    page.get_by_role("button", name="Zavrieť").click()
+    page.locator("button").filter(has_text="Zavrieť").last.click()
 
     _update_school_profile(
         page=page,
