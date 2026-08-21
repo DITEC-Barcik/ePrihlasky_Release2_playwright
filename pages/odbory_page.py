@@ -71,8 +71,8 @@ class Odbory(BasePage):
             "Pridať odbor"
         )
         self._safe_click(
-            self.page.get_by_text("matematika 1113311 •"),
-            "matematika 1113311"
+            self.page.get_by_text("1113311"),
+            "Odbor 1113311"
         )
         self._safe_click(
             self.page.locator(".checkmark").first,
