@@ -24,7 +24,7 @@ def test_vyveska_SS(page: Page) -> None:
     vyveska.fill_pristupovy_kod("EzViLyfJsBgP")
     vyveska.click_zobrazit_vysledky()
     vyveska.verify_kod_already_shown("EzViLyfJsBgP")
-    vyveska.click_expand_result(nth_child="71")
+    vyveska.click_expand_result(kod="EzViLyfJsBgP")
     vyveska.verify_prijaty_in_table()
     vyveska.verify_neprijaty_in_table()
     logout.logout()

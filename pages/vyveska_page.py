@@ -52,13 +52,11 @@ class VyveskaMS(BasePage):
         expect(self.page.locator("#elektronicka-vyveska")).to_contain_text("Výsledky vyhľadávania na základe")
         expect(self.page.locator("#elektronicka-vyveska")).to_contain_text(f'"{kod}"')
 
-    def click_expand_result(self, nth: int = None, nth_child: str = None):
-        if nth_child:
+    def click_expand_result(self, kod: str = None):
+        if kod:
             self._safe_click(
-                self.page.locator(
-                    f"div:nth-child({nth_child}) > .profile-wrapper-body > .content-wrapper > .content-wrapper-header > .header-result > .material-icons.add"
-                ),
-                "Rozbaliť výsledok"
+                self.page.locator(".profile-wrapper", has_text=kod).locator(".material-icons.add"),
+                f"Rozbaliť výsledok - {kod}"
             )
         else:
             self._safe_click(

@@ -24,7 +24,7 @@ def test_vyveska_ZS(page: Page) -> None:
     vyveska.fill_pristupovy_kod("T6PU43fCAPN1")
     vyveska.click_zobrazit_vysledky()
     vyveska.verify_kod_already_shown("T6PU43fCAPN1")
-    vyveska.click_expand_result(nth_child="103")
+    vyveska.click_expand_result(kod="T6PU43fCAPN1")
     vyveska.verify_prijaty_in_table()
     vyveska.verify_neprijaty_in_table()
     logout.logout()

@@ -24,7 +24,7 @@ def test_vyveska_MS(page: Page) -> None:
     vyveska.fill_pristupovy_kod("iQsMZSl7NQQm")
     vyveska.click_zobrazit_vysledky()
     vyveska.verify_kod_already_shown("iQsMZSl7NQQm")
-    vyveska.click_expand_result(nth_child="116")
+    vyveska.click_expand_result(kod="iQsMZSl7NQQm")
     vyveska.verify_prijaty_in_table()
     vyveska.verify_neprijaty_in_table()
     logout.logout()
