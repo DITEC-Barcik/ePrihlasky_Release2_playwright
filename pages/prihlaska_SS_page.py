@@ -1,30 +1,33 @@
-from playwright.sync_api import Page
+﻿from playwright.sync_api import Page
 from pages.base_page import BasePage
 
 
 class PrihlaskaSS(BasePage):
     ODBOR_2_KOLO = "2b3813df-fbe6-41ce-be28-0efc6dfaca83"
-    ODBOR_1_KOLO = "fa97e1ee-cf77-4880-853a-5972261cdb4c"
+    # Nová konfigurácia portálu (šk. rok 2027/2028); pôvodne "fa97e1ee-cf77-4880-853a-5972261cdb4c" (2026/2027).
+    ODBOR_1_KOLO = "456570b0-6b5d-48ea-98a2-01751dca1a0a"
     TERMIN_PRIJIMACEJ_SKUSKY = "11"
     SUBOR_PRILOHA = "./data/Dokument.pdf"
+    ADRESA = "Prvej SNR 33/23"
+    ADRESA_LABEL = "Prvej SNR 33/23, 90701, Myjava, Myjava"
 
     def __init__(self, page: Page):
         super().__init__(page)
 
     def _click_dalej(self, nazov_kroku: str):
         self._safe_click(
-            self.page.get_by_role("button", name="Ďalej"),
+            self.page.locator("button.btn-dalej:visible").last,
             nazov_kroku
         )
 
-    def _upload_prilohy(self, sekcia_text: str, trigger_locator, nazov_prvku: str):
+    def _upload_prilohy(self, index: int, nazov_prvku: str):
         self._safe_click(
-            self.page.get_by_text(sekcia_text),
+            self.page.locator(".priloha-header").nth(index - 1),
             nazov_prvku
         )
         with self.page.expect_file_chooser() as fc_info:
             self._safe_click(
-                trigger_locator,
+                self.page.locator(f"#prilohyUploadZone{index} a.govuk-button__large"),
                 f"Vybrať súbor - {nazov_prvku}"
             )
         file_chooser = fc_info.value
@@ -91,28 +94,28 @@ class PrihlaskaSS(BasePage):
         )
 
         self._safe_fill(
-            self.page.get_by_role("textbox", name="Rodné číslo *"),
+            self.page.locator("#input-rodneCislo"),
             rc,
             "Rodné číslo"
         )
         self._safe_fill(
-            self.page.get_by_role("textbox", name="Krstné meno *"),
+            self.page.locator("#input-krstneMeno"),
             meno,
             "Krstné meno"
         )
         self._safe_fill(
-            self.page.get_by_role("textbox", name="Priezvisko *"),
+            self.page.locator("#input-priezvisko"),
             priezvisko,
             "Priezvisko"
         )
         self._safe_fill(
-            self.page.get_by_role("textbox", name="Rodné priezvisko"),
+            self.page.locator("#input-rodnePriezvisko"),
             priezvisko,
             "Rodné priezvisko"
         )
 
         self._safe_click(
-            self.page.locator("#step-1").get_by_role("button", name="Ďalej"),
+            self.page.locator("button.btn-dalej.last-focusable:visible"),
             "Ďalej - krok 1"
         )
 
@@ -122,7 +125,7 @@ class PrihlaskaSS(BasePage):
             "Miesto narodenia"
         )
         self._safe_fill(
-            self.page.locator("#adresaTPKrajina").get_by_role("textbox"),
+            self.page.locator("#adresaTPKrajina input.autocomplete-input"),
             "Slovenská re",
             "Krajina"
         )
@@ -132,42 +135,17 @@ class PrihlaskaSS(BasePage):
         )
 
         self._safe_fill(
-            self.page.locator("#adresaTPObec > .govuk-form-group > .input-wrapper > .govuk-input.autocomplete-input"),
-            "Myjava",
-            "Obec"
+            self.page.locator("#adresaTPAdresaRA input.autocomplete-input"),
+            self.ADRESA,
+            "Adresa"
         )
         self._safe_click(
-            self.page.get_by_text("Myjava (Myjava)"),
-            "Myjava (Myjava)"
+            self.page.locator("#adresaTPAdresaRA").get_by_text(self.ADRESA_LABEL, exact=True),
+            self.ADRESA_LABEL
         )
 
         self._safe_click(
-            self.page.get_by_role("textbox", name="Krajina *"),
-            "Ulica"
-        )
-        self._safe_click(
-            self.page.get_by_text("Narcisová", exact=True),
-            "Narcisová"
-        )
-
-        self._safe_fill(
-            self.page.get_by_role("textbox", name="Súpisné číslo"),
-            "4",
-            "Súpisné číslo"
-        )
-        self._safe_fill(
-            self.page.get_by_role("textbox", name="Orientačné číslo *"),
-            "2048",
-            "Orientačné číslo"
-        )
-        self._safe_fill(
-            self.page.get_by_role("textbox", name="PSČ *"),
-            "03845",
-            "PSČ"
-        )
-
-        self._safe_click(
-            self.page.get_by_role("button", name="Pridať dieťa"),
+            self.page.locator("button.btn-dalej.last-focusable:visible"),
             "Pridať dieťa"
         )
 
@@ -189,7 +167,7 @@ class PrihlaskaSS(BasePage):
             "Mentálne postihnutie - Nie"
         )
         self._safe_fill(
-            self.page.get_by_role("textbox", name="Poznámka:"),
+            self.page.locator("#textarea-DPDPoznamkaText"),
             "ŠVVP",
             "Poznámka"
         )
@@ -197,16 +175,16 @@ class PrihlaskaSS(BasePage):
 
     def step_3_vyber_skoly(self, nazov: str):
         self._safe_fill(
-            self.page.get_by_role("textbox", name="Názov školy alebo jej adresa"),
+            self.page.locator("#fulltext-input-SS"),
             nazov,
             "Názov školy alebo jej adresa"
         )
         self._safe_click(
-            self.page.get_by_role("button", name="Hľadať"),
+            self.page.locator("#fulltext-input-SS-button"),
             "Hľadať školu"
         )
         self._safe_click(
-            self.page.get_by_role("button", name="Stredná škola pre AT Pridať do prihlášky").nth(3),
+            self.page.locator("button.pridat-do-prihlasky").nth(3),
             "Pridať školu do prihlášky"
         )
         self._click_dalej("Ďalej - výber školy 1")
@@ -221,16 +199,16 @@ class PrihlaskaSS(BasePage):
 
     def step_3_vyber_skoly_1_kolo(self, nazov: str):
         self._safe_fill(
-            self.page.get_by_role("textbox", name="Názov školy alebo jej adresa"),
+            self.page.locator("#fulltext-input-SS"),
             nazov,
             "Názov školy alebo jej adresa"
         )
         self._safe_click(
-            self.page.get_by_role("button", name="Hľadať"),
+            self.page.locator("#fulltext-input-SS-button"),
             "Hľadať školu"
         )
         self._safe_click(
-            self.page.get_by_role("button", name="Stredná škola pre AT Pridať do prihlášky").nth(3),
+            self.page.locator("button.pridat-do-prihlasky").nth(3),
             "Pridať školu do prihlášky"
         )
         self._click_dalej("Ďalej - výber školy 1")
@@ -249,15 +227,36 @@ class PrihlaskaSS(BasePage):
         )
 
     def step_4_ZZ(self):
+        # Portál skryl výber "Uveďte adresu, na ktorú prijímate poštové zásielky"
+        # (#zastupca1AdresaRadio má triedu hidden), formulár inej adresy je rovno viditeľný.
+        self._safe_fill(
+            self.page.locator("#zastupca1InaAdresaKrajina input.autocomplete-input"),
+            "Slovenská re",
+            "Krajina korešpondenčnej adresy"
+        )
+        self._safe_click(
+            self.page.locator("#zastupca1InaAdresaKrajina").get_by_text("Slovenská republika", exact=True),
+            "Slovenská republika"
+        )
+        self._safe_fill(
+            self.page.locator("#zastupca1InaAdresaAdresaRA input.autocomplete-input"),
+            self.ADRESA,
+            "Korešpondenčná adresa"
+        )
+        self._safe_click(
+            self.page.locator("#zastupca1InaAdresaAdresaRA").get_by_text(self.ADRESA_LABEL, exact=True),
+            self.ADRESA_LABEL
+        )
+
         self._safe_check(
-            self.page.get_by_role("radio", name="Druhý zákonný zástupca nie je"),
+            self.page.locator("#zastupca2Radio_option_1"),
             "Druhý zákonný zástupca nie je známy"
         )
         self._click_dalej("Ďalej - krok zákonný zástupca")
 
     def step_5_ziak_navsteva_skoly(self):
         self._safe_check(
-            self.page.get_by_role("radio", name="Zo školy v zahraničí"),
+            self.page.locator("#prichodZiakaRadio_option_1"),
             "Zo školy v zahraničí"
         )
 
@@ -272,12 +271,13 @@ class PrihlaskaSS(BasePage):
             "Rok školskej dochádzky"
         )
 
-        self._safe_click(
-            self.page.get_by_role("textbox", name="Ročník *"),
+        self._safe_fill(
+            self.page.locator("#vyucovaciJazykVZakladnejSkoleAutocomplete input.autocomplete-input"),
+            "francúzsky",
             "Jazyk školy"
         )
         self._safe_click(
-            self.page.get_by_text("francúzsky", exact=True),
+            self.page.locator("#vyucovaciJazykVZakladnejSkoleAutocomplete").get_by_text("francúzsky", exact=True),
             "francúzsky"
         )
         self._click_dalej("Ďalej - návšteva školy")
@@ -295,7 +295,7 @@ class PrihlaskaSS(BasePage):
         )
         for _ in range(17):
             self._safe_click(
-                self.page.get_by_role("button", name="Odstrániť").nth(2),
+                self.page.locator("button.btn-odstranit:visible").nth(2),
                 "Odstrániť predmet zo 6. ročníka"
             )
 
@@ -315,7 +315,7 @@ class PrihlaskaSS(BasePage):
         )
         for _ in range(17):
             self._safe_click(
-                self.page.get_by_role("button", name="Odstrániť").nth(2),
+                self.page.locator("button.btn-odstranit:visible").nth(2),
                 "Odstrániť predmet zo 7. ročníka"
             )
 
@@ -335,7 +335,7 @@ class PrihlaskaSS(BasePage):
         )
         for _ in range(17):
             self._safe_click(
-                self.page.get_by_role("button", name="Odstrániť").nth(2),
+                self.page.locator("button.btn-odstranit:visible").nth(2),
                 "Odstrániť predmet z 8. ročníka"
             )
 
@@ -355,7 +355,7 @@ class PrihlaskaSS(BasePage):
         )
         for _ in range(17):
             self._safe_click(
-                self.page.get_by_role("button", name="Odstrániť").nth(2),
+                self.page.locator("button.btn-odstranit:visible").nth(2),
                 "Odstrániť predmet z 9. ročníka"
             )
 
@@ -363,74 +363,50 @@ class PrihlaskaSS(BasePage):
 
     def step_7_sutaze(self):
         self._safe_click(
-            self.page.get_by_role("button", name="Pridať súťaž"),
+            self.page.locator("#btn-pridat-sutaz"),
             "Pridať súťaž"
         )
         self._safe_fill(
-            self.page.get_by_role("textbox", name="Názov súťaže *"),
+            self.page.locator("#input-modalNazovSutazeText"),
             "Zumba",
             "Názov súťaže"
         )
 
         self._safe_select(
-            self.page.get_by_label("Druh súťaže"),
+            self.page.locator("#select-modalDruhSutazeSelect"),
             "2",
             "Druh súťaže"
         )
         self._safe_select(
-            self.page.get_by_label("Úroveň súťaže"),
+            self.page.locator("#select-modalUrovenSutazeSelect"),
             "6",
             "Úroveň súťaže"
         )
 
         self._safe_check(
-            self.page.get_by_role("radio", name="1. miesto"),
+            self.page.locator("#modalTypUmiestneniaRadio_option_0"),
             "1. miesto"
         )
 
         self._safe_select(
-            self.page.get_by_label("Školský rok"),
+            self.page.locator("#select-modalSkolskyRokSelect"),
             "2023/2024",
             "Školský rok"
         )
 
         self._safe_click(
-            self.page.get_by_role("button", name="Pridať", exact=True),
+            self.page.locator("button.btn-pridat:visible"),
             "Pridať súťaž"
         )
         self._click_dalej("Ďalej - súťaže")
 
     def step_8_prilohy(self):
-        self._upload_prilohy(
-            "Vysvedčenie zo 6. ročníka Nenahrané Nenahrané Nahrané",
-            self.page.get_by_role("link", name="Vybrať súbor"),
-            "Príloha - Vysvedčenie zo 6. ročníka"
-        )
-        self._upload_prilohy(
-            "Vysvedčenie zo 7. ročníka Nenahrané Nenahrané Nahrané",
-            self.page.locator("#prilohyUploadZone2").get_by_role("link", name="Vybrať súbor"),
-            "Príloha - Vysvedčenie zo 7. ročníka"
-        )
-        self._upload_prilohy(
-            "Vysvedčenie z 8. ročníka Nenahrané Nenahrané Nahrané",
-            self.page.locator("#prilohyUploadZone3").get_by_role("link", name="Vybrať súbor"),
-            "Príloha - Vysvedčenie z 8. ročníka"
-        )
-        self._upload_prilohy(
-            "Vysvedčenie z 9. ročníka Nenahrané Nenahrané Nahrané",
-            self.page.locator("#prilohyUploadZone4").get_by_role("link", name="Vybrať súbor"),
-            "Príloha - Vysvedčenie z 9. ročníka"
-        )
-        self._upload_prilohy(
-            "Olympiáda / súťaž: Zumba Nenahrané Nenahrané Nahrané",
-            self.page.locator("#prilohyUploadZone5").get_by_role("link", name="Vybrať súbor"),
-            "Príloha - Olympiáda alebo súťaž Zumba"
-        )
-        self._upload_prilohy(
-            "Potvrdenie o zdravotnej spôsobilosti (stredná škola) Nenahrané Nenahrané Nahrané",
-            self.page.locator("#prilohyUploadZone6").get_by_role("link", name="Vybrať súbor"),
-            "Príloha - Potvrdenie o zdravotnej spôsobilosti (stredná škola)"
-        )
+        self._upload_prilohy(1, "Príloha - Vysvedčenie zo 6. ročníka")
+        self._upload_prilohy(2, "Príloha - Vysvedčenie zo 7. ročníka")
+        self._upload_prilohy(3, "Príloha - Vysvedčenie z 8. ročníka")
+        self._upload_prilohy(4, "Príloha - Vysvedčenie z 9. ročníka")
+        self._upload_prilohy(5, "Príloha - Olympiáda alebo súťaž Zumba")
+        self._upload_prilohy(6, "Príloha - Potvrdenie o zdravotnej spôsobilosti (stredná škola)")
 
         self._click_dalej("Ďalej - prílohy")
 
@@ -444,7 +420,7 @@ class PrihlaskaSS(BasePage):
             "Súhlas so spracovaním osobných údajov"
         )
         self._safe_click(
-            self.page.get_by_role("button", name="Odoslať prihlášku"),
+            self.page.locator("button.btn-odoslat-prihlasku"),
             "Odoslať prihlášku"
         )
 

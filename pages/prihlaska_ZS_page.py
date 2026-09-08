@@ -5,13 +5,8 @@ from pages.base_page import BasePage
 class PrihlaskaZS(BasePage):
     KRAJINA = "slovenska re"
     KRAJINA_LABEL = "Slovenská republika"
-    OBEC = "Brusno"
-    OBEC_LABEL = "Brusno (Banská Bystrica)"
-    ULICA = "cibulk"
-    ULICA_LABEL = "Cibulková"
-    SUPISNE_CISLO = "8"
-    ORIENTACNE_CISLO = "63"
-    PSC = "03687"
+    ADRESA = "Prvej SNR 33/23"
+    ADRESA_LABEL = "Prvej SNR 33/23, 90701, Myjava, Myjava"
 
     def __init__(self, page: Page):
         super().__init__(page)
@@ -29,12 +24,13 @@ class PrihlaskaZS(BasePage):
             self.page.get_by_text("Vytvoriť prihlášku").first,
             "Vytvoriť prihlášku"
         )
+        # Modal je vnorený v kontajneri s aria-hidden="true", takže role lokátory ho nenájdu.
         self._safe_check(
-            self.page.get_by_role("radio", name="Základná škola Prihlášku môž"),
+            self.page.locator("#modalVytvoritPrihlaskuRadio_option_1"),
             "Typ prihlášky - Základná škola"
         )
         self._safe_click(
-            self.page.get_by_role("button", name="Pridať", exact=True),
+            self.page.locator("button.btn-pridat.govuk-button:visible"),
             "Pridať"
         )
 
@@ -55,23 +51,28 @@ class PrihlaskaZS(BasePage):
             "Dieťa má rodné číslo"
         )
         self._safe_fill(
-            self.page.get_by_role("textbox", name="Rodné číslo *"),
+            self.page.locator("#input-rodneCislo"),
             rodne_cislo,
             "Rodné číslo"
         )
         self._safe_fill(
-            self.page.get_by_role("textbox", name="Krstné meno *"),
+            self.page.locator("#input-krstneMeno"),
             meno,
             "Krstné meno"
         )
         self._safe_fill(
-            self.page.get_by_role("textbox", name="Priezvisko *"),
+            self.page.locator("#input-priezvisko"),
             priezvisko,
             "Priezvisko"
         )
+        self._safe_fill(
+            self.page.locator("#input-rodnePriezvisko"),
+            priezvisko,
+            "Rodné priezvisko"
+        )
 
         self._safe_click(
-            self.page.locator("#step-1").get_by_role("button", name="Ďalej"),
+            self.page.locator("button.btn-dalej.last-focusable:visible"),
             "Ďalej - krok 1"
         )
 
@@ -81,7 +82,7 @@ class PrihlaskaZS(BasePage):
             "Miesto narodenia"
         )
         self._safe_fill(
-            self.page.locator("#adresaTPKrajina").get_by_role("textbox"),
+            self.page.locator("#adresaTPKrajina input.autocomplete-input"),
             self.KRAJINA,
             "Krajina"
         )
@@ -91,44 +92,22 @@ class PrihlaskaZS(BasePage):
         )
 
         self._safe_fill(
-            self.page.locator("#adresaTPObec > .govuk-form-group > .input-wrapper > .govuk-input.autocomplete-input"),
-            self.OBEC,
-            "Obec"
+            self.page.locator("#adresaTPAdresaRA input.autocomplete-input"),
+            self.ADRESA,
+            "Adresa"
         )
         self._safe_click(
-            self.page.get_by_text(self.OBEC_LABEL),
-            "Brusno (Banská Bystrica)"
-        )
-
-        self._safe_fill(
-            self.page.get_by_role("textbox", name="Krajina *"),
-            self.ULICA,
-            "Ulica"
-        )
-        self._safe_click(
-            self.page.get_by_text(self.ULICA_LABEL),
-            "Cibulková"
-        )
-
-        self._safe_fill(
-            self.page.get_by_role("textbox", name="Súpisné číslo"),
-            self.SUPISNE_CISLO,
-            "Súpisné číslo"
-        )
-        self._safe_fill(
-            self.page.get_by_role("textbox", name="Orientačné číslo *"),
-            self.ORIENTACNE_CISLO,
-            "Orientačné číslo"
-        )
-        self._safe_fill(
-            self.page.get_by_role("textbox", name="PSČ *"),
-            self.PSC,
-            "PSČ"
+            self.page.locator("#adresaTPAdresaRA").get_by_text(self.ADRESA_LABEL, exact=True),
+            self.ADRESA_LABEL
         )
 
         self._safe_click(
-            self.page.locator("#step-2").get_by_role("button", name="Pridať dieťa"),
+            self.page.locator("button.btn-dalej.last-focusable:visible"),
             "Pridať dieťa - potvrdenie"
+        )
+        self._safe_check(
+            self.page.get_by_role("radio", name=f"{meno} {priezvisko}"),
+            "Výber pridaného dieťaťa"
         )
         self._click_dalej("Ďalej po pridaní dieťaťa")
         self._click_dalej("Ďalej na ďalší krok")
@@ -192,6 +171,25 @@ class PrihlaskaZS(BasePage):
         )
 
     def step_4_ZZ(self):
+        self._safe_fill(
+            self.page.locator("#zastupca1InaAdresaKrajina input.autocomplete-input"),
+            self.KRAJINA,
+            "Krajina korešpondenčnej adresy"
+        )
+        self._safe_click(
+            self.page.locator("#zastupca1InaAdresaKrajina").get_by_text(self.KRAJINA_LABEL, exact=True),
+            "Slovenská republika"
+        )
+        self._safe_fill(
+            self.page.locator("#zastupca1InaAdresaAdresaRA input.autocomplete-input"),
+            self.ADRESA,
+            "Korešpondenčná adresa"
+        )
+        self._safe_click(
+            self.page.locator("#zastupca1InaAdresaAdresaRA").get_by_text(self.ADRESA_LABEL, exact=True),
+            self.ADRESA_LABEL
+        )
+
         self._safe_check(
             self.page.get_by_role("radio", name="Druhý zákonný zástupca nie je"),
             "Druhý zákonný zástupca nie je známy"

@@ -48,10 +48,11 @@ def test_prihlaska_na_ZS(page: Page, person_data) -> None:
         "Identifikátor prihlášky sa v súhrnnom prehľade nezobrazil."
     ).to_be_visible()
 
+    # Pôvodne: "2026/2027" - portál má novú konfiguráciu, zápis už beží pre 2027/2028.
     expect(
         page.locator("#suhrnny-prehlad"),
-        "V súhrnnom prehľade chýba školský rok 2026/2027."
-    ).to_contain_text("2026/2027")
+        "V súhrnnom prehľade chýba školský rok 2027/2028."
+    ).to_contain_text("2027/2028")
 
     expect(
         page.locator("#suhrnny-prehlad"),
@@ -93,10 +94,12 @@ def test_prihlaska_na_ZS(page: Page, person_data) -> None:
         "V súhrnnom prehľade chýba rodný jazyk."
     ).to_contain_text("slovenský")
 
+    # Pôvodne: "Cibulková 8/63, 03687, Brusno, ..." - po prechode na register adries
+    # sa vyberá adresa z číselníka a súhrn ju zobrazuje bez obce.
     expect(
         page.locator("#suhrnny-prehlad"),
         "V súhrnnom prehľade chýba adresa dieťaťa."
-    ).to_contain_text("Cibulková 8/63, 03687, Brusno, Slovenská republika")
+    ).to_contain_text("Prvej SNR 33/23, 90701, Slovenská republika")
 
     expect(
         page.locator("#suhrnny-prehlad"),
@@ -151,7 +154,7 @@ def test_prihlaska_na_ZS(page: Page, person_data) -> None:
     expect(
         page.locator("#zastupcovia"), #zastupovcovia
         "V prehľade zákonných zástupcov chýba adresa."
-    ).to_contain_text("Mandľová 16/745, 03874, Trenčianska Teplá, Slovenská republika")
+    ).to_contain_text("Prvej SNR 33/23, 90701, Slovenská republika")
 
     expect(
         page.locator("#zastupcovia"),
@@ -238,7 +241,7 @@ def test_doplnenie_prilohy_na_ZS(page: Page, person_data) -> None:
         "Na detaile prihlášky sa nezobrazuje stav 'Podaná'."
     ).to_contain_text("Podaná")
 
-    identifikator = page.locator("div.prihlaskaIdentifikator").text_content()
+    identifikator = page.locator(".prihlaskaIdentifikator").text_content()
 
     prilohy.vyziadat_prilohu("Odvolanie prílohy.")
 

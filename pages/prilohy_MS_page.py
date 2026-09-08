@@ -24,7 +24,7 @@ class PrilohyMS(BasePage):
             "Typ prílohy"
         )
         self._safe_fill(
-            self.page.get_by_role("textbox", name="Dôvod: *"),
+            self.page.locator("#textarea-dovodText"),
             self.DOVOD,
             "Dôvod"
         )

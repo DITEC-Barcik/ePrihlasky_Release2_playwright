@@ -24,7 +24,7 @@ class PrilohyZS(BasePage):
         )
 
         self._safe_fill(
-            self.page.get_by_role("textbox", name="Dôvod: *"),
+            self.page.locator("#textarea-dovodText"),
             dovod,
             "Dôvod vyžiadania prílohy"
         )

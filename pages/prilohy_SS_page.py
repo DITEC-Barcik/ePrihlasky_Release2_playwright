@@ -4,7 +4,8 @@ from pages.base_page import BasePage
 
 class PrilohySS(BasePage):
     ODBOR_2_KOLO = "2b3813df-fbe6-41ce-be28-0efc6dfaca83"
-    ODBOR_1_KOLO = "fa97e1ee-cf77-4880-853a-5972261cdb4c"
+    # Nová konfigurácia portálu (šk. rok 2027/2028); pôvodne "fa97e1ee-cf77-4880-853a-5972261cdb4c" (2026/2027).
+    ODBOR_1_KOLO = "456570b0-6b5d-48ea-98a2-01751dca1a0a"
     TYP_PRILOHY = "3"
     SUBOR = "./data/Dokument.pdf"
 
@@ -16,19 +17,21 @@ class PrilohySS(BasePage):
             self.page.get_by_role("button", name="Zoradiť podľa: Predvolené"),
             "Zoradiť podľa: Predvolené"
         )
+        # Modal je vnorený v #riaditel-home-page, ktorý má pri otvorení aria-hidden="true",
+        # takže obsah modalu nie je v accessibility strome a role/name lokátory ho nenájdu.
         self._safe_check(
-            self.page.get_by_role("radio", name="Podľa dátumu podania (od"),
+            self.page.locator("#modalZoraditPrihlaskyRadio_option_1"),
             "Podľa dátumu podania"
         )
         self._safe_click(
-            self.page.get_by_role("button", name="Zoradiť prihlášky"),
+            self.page.locator("button.btn-zoradit:visible"),
             "Zoradiť prihlášky"
         )
 
         self.page.wait_for_load_state("networkidle")
 
         self._safe_click(
-            self.page.get_by_role("button", name="Zobraziť").nth(1),
+            self.page.get_by_role("button", name="Zobraziť").first,
             nazov_akcie
         )
         self.page.wait_for_load_state("networkidle")
@@ -46,7 +49,7 @@ class PrilohySS(BasePage):
             "Hľadať prihlášku"
         )
         self._safe_click(
-            self.page.get_by_role("button", name="Zobraziť").nth(1),
+            self.page.get_by_role("button", name="Zobraziť").first,
             nazov_akcie
         )
 
@@ -93,7 +96,7 @@ class PrilohySS(BasePage):
         )
 
         self._safe_fill(
-            self.page.get_by_role("textbox", name="Dôvod: *"),
+            self.page.locator("#textarea-dovodText"),
             "Žiadosť o doplnenie prílohy.",
             "Dôvod vyžiadania prílohy"
         )

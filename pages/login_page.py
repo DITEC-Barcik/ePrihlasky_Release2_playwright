@@ -17,7 +17,7 @@ class LoginPage(BasePage):
         self.login_form = page.get_by_role("link", name="account_circle Prihlasovacie")
 
         self.login_link_riad = page.get_by_role("link", name="Pre školy")
-        self.school = page.get_by_role("textbox", name="Vybrať školu *")
+        self.school = page.get_by_role("textbox", name="Vybrať školu")
         self.submit_button_riad = page.get_by_role("button", name="Pokračovať")
         self.name_of_school = page.locator("input.govuk-input.autocomplete-input")
 

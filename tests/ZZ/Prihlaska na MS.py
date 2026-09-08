@@ -48,7 +48,7 @@ def _expect_ms_summary(page: Page, data, helper: Helper) -> None:
     summary = page.locator("#suhrnny-prehlad")
 
     _expect_text(summary, re.compile(r"P-2026-.+"), "V súhrnnom prehľade chýba identifikátor prihlášky.")
-    _expect_text(summary, "2026/2027", "V súhrnnom prehľade chýba školský rok.")
+    _expect_text(summary, "2027/2028", "V súhrnnom prehľade chýba školský rok.")
     _expect_text(summary, data.meno, "V súhrnnom prehľade chýba meno dieťaťa.")
     _expect_text(summary, data.priezvisko, "V súhrnnom prehľade chýba priezvisko dieťaťa.")
     _expect_text(summary, data.rodne_cislo, "V súhrnnom prehľade chýba rodné číslo dieťaťa.")
@@ -65,9 +65,11 @@ def _expect_ms_summary(page: Page, data, helper: Helper) -> None:
     _expect_text(summary, "slovenská", "V súhrnnom prehľade chýba národnosť.")
     _expect_text(summary, "Slovenská republika", "V súhrnnom prehľade chýba štátna príslušnosť.")
     _expect_text(summary, "slovenský", "V súhrnnom prehľade chýba materinský jazyk.")
+    # Pôvodne: "Debraďská 999/21, 54231, Bobot, ..." - po prechode na register adries
+    # sa vyberá adresa z číselníka a súhrn ju zobrazuje bez obce.
     _expect_text(
         summary,
-        "Debraďská 999/21, 54231, Bobot, Slovenská republika",
+        "Prvej SNR 33/23, 90701, Slovenská republika",
         "V súhrnnom prehľade chýba adresa dieťaťa."
     )
     _expect_text(summary, "Celodennú výchovu a vzdelávanie", "V súhrnnom prehľade chýba typ výchovy.")
@@ -87,7 +89,7 @@ def _expect_ms_school_and_guardians(page: Page) -> None:
     _expect_text(guardians, "15.02.1985", "V sekcii zástupcov chýba dátum narodenia 1. zákonného zástupcu.")
     _expect_text(
         guardians,
-        "Mandľová 16/745, 03874, Trenčianska Teplá, Slovenská republika",
+        "Prvej SNR 33/23, 90701, Slovenská republika",
         "V sekcii zástupcov chýba adresa 1. zákonného zástupcu."
     )
     _expect_text(guardians, "katalontest987@gmail.com", "V sekcii zástupcov chýba e-mail 1. zákonného zástupcu.")
@@ -176,7 +178,7 @@ def test_doplnenie_prilohy_na_MS(page: Page, person_data) -> None:
         "Pred prácou s prílohami nemá prihláška stav 'Podaná'."
     )
 
-    identifikator = page.locator("div.prihlaskaIdentifikator").text_content()
+    identifikator = page.locator(".prihlaskaIdentifikator").text_content()
 
     prilohy.vyziadanie_prilohy_MS()
     prilohy.odvolanie_prilohy_MS()
