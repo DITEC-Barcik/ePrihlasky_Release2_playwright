@@ -30,14 +30,14 @@ class ProfilZZ(BasePage):
     def zmen_tel_cislo(self, cislo: str):
         self._otvorit_upravu_udajov()
         self._safe_fill(
-            self.page.get_by_role("textbox", name="Telefónne číslo *"),
+            self.page.locator("#input-telefon"),
             cislo,
             "Telefónne číslo"
         )
 
     def click_on_ulozit_zmeny(self):
         self._safe_click(
-            self.page.locator("button").filter(has_text="Uložiť zmeny").first,
+            self.page.locator("button.btn-ulozit:visible"),
             "Uložiť zmeny"
         )
 
@@ -47,7 +47,7 @@ class ProfilZZ(BasePage):
             "Zmeniť e-mail"
         )
         self._safe_fill(
-            self.page.get_by_role("textbox", name="Vaša nová emailová adresa *"),
+            self.page.locator("#input-zmenitEmail"),
             mail,
             "Vaša nová emailová adresa"
         )
@@ -58,7 +58,7 @@ class ProfilZZ(BasePage):
 
     def overit_kod_mailu(self, kod: str):
         self._safe_fill(
-            self.page.get_by_role("textbox", name="Overovací kód *"),
+            self.page.get_by_role("textbox", name="Overovací kód"),
             kod,
             "Overovací kód"
         )
@@ -77,7 +77,7 @@ class ProfilZZ(BasePage):
         psc: str
     ):
         self._safe_check(
-            self.page.get_by_role("radio", name="Iná korešpondenčná adresa"),
+            self.page.locator("#trvalyPobytRadio_option_1"),
             "Iná korešpondenčná adresa"
         )
 
@@ -108,7 +108,7 @@ class ProfilZZ(BasePage):
             )
 
         self._safe_fill(
-            self.page.get_by_role("textbox", name="Krajina *"),
+            self.page.locator("#adresaTPUlica").get_by_role("textbox"),
             ulica,
             "Ulica"
         )
@@ -125,18 +125,18 @@ class ProfilZZ(BasePage):
 
         if scislo == "32":
             self._safe_fill(
-                self.page.get_by_role("textbox", name="Súpisné číslo"),
+                self.page.locator("#input-adresaTPSupisneCislo"),
                 scislo,
                 "Súpisné číslo"
             )
 
         self._safe_fill(
-            self.page.get_by_role("textbox", name="Orientačné číslo *"),
+            self.page.locator("#input-adresaTPOrientacneCislo"),
             ocislo,
             "Orientačné číslo"
         )
         self._safe_fill(
-            self.page.get_by_role("textbox", name="PSČ *"),
+            self.page.locator("#input-adresaTPPSC"),
             psc,
             "PSČ"
         )

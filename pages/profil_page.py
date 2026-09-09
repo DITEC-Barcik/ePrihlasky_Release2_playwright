@@ -22,7 +22,7 @@ class ProfilPage(BasePage):
 
     def _change_phone_number(self, cislo: str):
         self._safe_fill(
-            self.page.get_by_role("textbox", name="Telefónne číslo"),
+            self.page.locator("#input-telefon"),
             cislo,
             "Telefónne číslo"
         )
@@ -45,7 +45,7 @@ class ProfilPage(BasePage):
 
     def change_email(self, mail: str):
         self._safe_fill(
-            self.page.get_by_role("textbox", name="Vaša nová emailová adresa *"),
+            self.page.locator("#input-zmenitEmail"),
             mail,
             "Vaša nová emailová adresa"
         )
@@ -56,7 +56,7 @@ class ProfilPage(BasePage):
 
     def load_kod(self, kod: str):
         self._safe_fill(
-            self.page.get_by_role("textbox", name="Overovací kód *"),
+            self.page.get_by_role("textbox", name="Overovací kód"),
             kod,
             "Overovací kód"
         )
@@ -70,7 +70,7 @@ class ProfilPage(BasePage):
 
     def change_school(self, school_name: str):
         self._safe_click(
-            self.page.get_by_role("textbox", name="Škola *"),
+            self.page.get_by_role("textbox", name="Škola"),
             "Škola"
         )
         self._safe_click(
