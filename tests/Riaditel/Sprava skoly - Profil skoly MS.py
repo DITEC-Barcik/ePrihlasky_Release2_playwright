@@ -50,7 +50,7 @@ def _update_school_profile(
         "Nepodarilo sa vybrať možnosť vonkajšieho ihriska."
     )
 
-    page.get_by_role("textbox", name="Krátky popis školy *").fill(short_description)
+    page.get_by_role("textbox", name="Krátky popis školy").fill(short_description)
     sprava_skoly.click_on_ulozit_zmeny()
 
     _expect_text(

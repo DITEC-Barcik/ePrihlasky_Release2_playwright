@@ -33,7 +33,7 @@ def _update_zs_school_profile_first_version(
     page.get_by_text("Multifunkčné vonkajšie ihrisko").click()
     page.get_by_text("Úroveň 2: Digitálna komuniká").click()
     page.locator("#radioGroup-ZS_WiFi").get_by_text("Nie").click()
-    page.get_by_role("textbox", name="Krátky popis školy *").fill("testovací popis 1")
+    page.get_by_role("textbox", name="Krátky popis školy").fill("testovací popis 1")
 
     sprava_skoly.click_on_ulozit_zmeny()
 
@@ -57,7 +57,7 @@ def _update_zs_school_profile_second_version(
     page.get_by_role("radio", name="Bez vonkajšieho ihriska").check()
     page.get_by_role("radio", name="Úroveň 5: Riešenie digitá").check()
     page.get_by_role("radio", name="Áno").check()
-    page.get_by_role("textbox", name="Krátky popis školy *").fill("testovací popis 2")
+    page.get_by_role("textbox", name="Krátky popis školy").fill("testovací popis 2")
 
     sprava_skoly.click_on_ulozit_zmeny()
 
