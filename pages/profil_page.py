@@ -3,6 +3,8 @@ from pages.base_page import BasePage
 
 
 class ProfilPage(BasePage):
+    KONTAKTNY_EMAIL = "mail@tst.net"
+
     def __init__(self, page: Page):
         super().__init__(page)
 
@@ -26,6 +28,14 @@ class ProfilPage(BasePage):
             cislo,
             "Telefónne číslo"
         )
+        # Nové povinné pole portálu; kým je prázdne, tlačidlo Uložiť zmeny zostáva disabled.
+        self._safe_fill(
+            self.page.locator("#input-kontaktnyEmail"),
+            self.KONTAKTNY_EMAIL,
+            "Kontaktná e-mailová adresa"
+        )
+        # Formulár sa prevaliduje až po opustení poľa.
+        self.page.locator("#input-kontaktnyEmail").press("Tab")
         self._safe_click(
             self.page.get_by_role("button", name="Uložiť zmeny"),
             "Uložiť zmeny"
@@ -39,6 +49,8 @@ class ProfilPage(BasePage):
             self.page.get_by_role("link", name="Upraviť údaje"),
             "Upraviť údaje"
         )
+        # Bez počkania sa polia vyplnia skôr, než sa naviaže validácia, a tlačidlo zostane disabled.
+        self.page.wait_for_load_state("networkidle")
 
     def change_tel_cislo(self, cislo: str):
         self._change_phone_number(cislo)
