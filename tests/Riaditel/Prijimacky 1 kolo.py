@@ -144,9 +144,10 @@ def test_prijimacky_odoslanie_sprav(page: Page, person_data) -> None:
         f"{data.priezvisko} {data.meno}",
         "V detaile prihlášky sa nezobrazilo meno žiaka."
     )
+    # Pôvodne "O4" - po prekonfigurovaní odborov má odbor iné poradové číslo.
     _expect_text(
         page.locator("#prij_edit_detaily"),
-        "O4 - zlievač • slovenský • 2285H00",
+        "O7 - zlievač • slovenský • 2285H00",
         "V detaile prihlášky sa nezobrazili očakávané detaily odboru."
     )
 
@@ -231,11 +232,13 @@ def test_porovnaj_body_pdf_vizualne():
     compare_pdf_visual(
         actual_pdf="data/downloads/bodyDownloaded.pdf",
         expected_pdf="data/BodyPredloha.pdf",
+        # Masky pokrývajú celé odseky, nielen premenlivé hodnoty - dĺžka mena
+        # a dátumu mení zalomenie riadkov a tým posúva zvyšok odseku.
         masks={
             0: [
-                (100, 300, 400, 330),
-                (300, 450, 500, 480),
-                (250, 250, 450, 290),
+                (110, 255, 470, 293),    # oslovenie zákonného zástupcu
+                (110, 303, 1075, 364),   # odsek s menom žiaka a dátumom narodenia
+                (110, 439, 475, 474),    # prístupový kód
             ],
         },
         threshold=0.05,

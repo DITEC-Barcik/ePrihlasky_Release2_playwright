@@ -5,7 +5,8 @@ from pages.base_page import BasePage
 class Prijimacky(BasePage):
     KOLO_2 = "2"
     ODBOR_2_KOLO = "2b3813df-fbe6-41ce-be28-0efc6dfaca83"
-    ODBOR_1_KOLO = "fa97e1ee-cf77-4880-853a-5972261cdb4c"
+    # Nová konfigurácia portálu (šk. rok 2027/2028); pôvodne "fa97e1ee-cf77-4880-853a-5972261cdb4c" (2026/2027).
+    ODBOR_1_KOLO = "456570b0-6b5d-48ea-98a2-01751dca1a0a"
 
     TERMIN_DEN = "12"
     TERMIN_MESIAC = "10"
@@ -30,8 +31,9 @@ class Prijimacky(BasePage):
         )
 
     def _open_akcie_menu(self):
+        # Vlastný checkbox - reálny input je skrytý, kliká sa na span.checkmark.
         self._safe_click(
-            self.page.locator("//body/div[@class='wrapper-full']/div[@class='govuk-width-container']/div[@class='govuk-main-wrapper verejna-zona']/div[@class='sub-container']/div[@class='riaditel-prijimacky-container']/div[@class='fixed-left-column']/div[2]/div[1]/div[1]/span[1]"),
+            self.page.locator("div.vybrate-wrapper:visible .checkmark").first,
             "Výber akcie"
         )
         self._safe_click(
@@ -76,12 +78,13 @@ class Prijimacky(BasePage):
             self.page.get_by_role("button", name="Zoradiť podľa: Predvolené"),
             "Zoradiť podľa: Predvolené"
         )
+        # Modal je vnorený v kontajneri s aria-hidden="true", takže role lokátory ho nenájdu.
         self._safe_check(
-            self.page.get_by_role("radio", name="Podľa dátumu podania (od"),
+            self.page.locator("#modalZoraditPrijimackyRadio_option_1"),
             "Podľa dátumu podania"
         )
         self._safe_click(
-            self.page.get_by_role("button", name="Zoradiť prihlášky"),
+            self.page.locator("button.btn-zoradit:visible"),
             "Zoradiť prihlášky"
         )
 
@@ -94,7 +97,7 @@ class Prijimacky(BasePage):
 
     def zobraz_prihlasku_detail(self):
         self._safe_click(
-            self.page.get_by_role("button", name="Zobraziť").nth(1),
+            self.page.get_by_role("button", name="Zobraziť").first,
             "Zobraziť detail prihlášky"
         )
 
