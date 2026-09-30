@@ -65,11 +65,9 @@ def _expect_ms_summary(page: Page, data, helper: Helper) -> None:
     _expect_text(summary, "slovenská", "V súhrnnom prehľade chýba národnosť.")
     _expect_text(summary, "Slovenská republika", "V súhrnnom prehľade chýba štátna príslušnosť.")
     _expect_text(summary, "slovenský", "V súhrnnom prehľade chýba materinský jazyk.")
-    # Pôvodne: "Debraďská 999/21, 54231, Bobot, ..." - po prechode na register adries
-    # sa vyberá adresa z číselníka a súhrn ju zobrazuje bez obce.
     _expect_text(
         summary,
-        "Prvej SNR 33/23, 90701, Slovenská republika",
+        "Prvej SNR 33/23, 90701, Myjava, Slovenská republika",
         "V súhrnnom prehľade chýba adresa dieťaťa."
     )
     _expect_text(summary, "Celodennú výchovu a vzdelávanie", "V súhrnnom prehľade chýba typ výchovy.")
@@ -89,7 +87,7 @@ def _expect_ms_school_and_guardians(page: Page) -> None:
     _expect_text(guardians, "15.02.1985", "V sekcii zástupcov chýba dátum narodenia 1. zákonného zástupcu.")
     _expect_text(
         guardians,
-        "Prvej SNR 33/23, 90701, Slovenská republika",
+        "Prvej SNR 33/23, 90701, Myjava, Slovenská republika",
         "V sekcii zástupcov chýba adresa 1. zákonného zástupcu."
     )
     _expect_text(guardians, "katalontest987@gmail.com", "V sekcii zástupcov chýba e-mail 1. zákonného zástupcu.")

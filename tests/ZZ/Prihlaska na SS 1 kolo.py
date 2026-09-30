@@ -110,13 +110,10 @@ def test_prihlaska_na_SS_1_kolo(page: Page, person_data) -> None:
         "V súhrnnom prehľade chýba materinský jazyk."
     ).to_contain_text("slovenský")
 
-    # Pôvodne: "Narcisová 4/2048, 03845, Myjava, Slovenská republika" (samostatné polia Obec/Ulica/PSČ).
-    # Po zmene na register adries sa vyberá "Prvej SNR 33/23, 90701, Myjava, Myjava", ale súhrn
-    # zobrazuje len "33/23, 90701, Slovenská republika" - chýba ulica a obec (na overenie s vývojom).
     expect(
         page.locator("#suhrnny-prehlad"),
         "V súhrnnom prehľade chýba adresa žiaka."
-    ).to_contain_text("33/23, 90701, Slovenská republika")
+    ).to_contain_text("Prvej SNR 33/23, 90701, Myjava, Slovenská republika")
 
     expect(
         page.locator("#suhrnny-prehlad"),

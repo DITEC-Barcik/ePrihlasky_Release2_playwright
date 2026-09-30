@@ -51,7 +51,7 @@ class SpravaPouzivatelov(BasePage):
     def otvor_profil(self):
         self.page.wait_for_load_state("networkidle")
         self._safe_click(
-            self.page.get_by_role("link", name="Rozbaliť profilové menu"),
+            self.page.locator(".profil-dropdown"),
             "Rozbaliť profilové menu"
         )
         self._safe_click(

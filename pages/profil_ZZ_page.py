@@ -9,7 +9,7 @@ class ProfilZZ(BasePage):
     def _otvorit_profilove_menu(self):
         self.page.wait_for_load_state("networkidle")
         self._safe_click(
-            self.page.get_by_role("link", name="Rozbaliť profilové menu"),
+            self.page.locator(".profil-dropdown"),
             "Rozbaliť profilové menu"
         )
         self._safe_click(
@@ -82,7 +82,7 @@ class ProfilZZ(BasePage):
         )
 
         self._safe_fill(
-            self.page.locator("#adresaTPKrajina").get_by_role("textbox"),
+            self.page.locator("#adresaTPKrajina input.autocomplete-input"),
             krajina,
             "Krajina"
         )
@@ -92,7 +92,7 @@ class ProfilZZ(BasePage):
         )
 
         self._safe_fill(
-            self.page.locator("#adresaTPObec").get_by_role("textbox"),
+            self.page.locator("#adresaTPObec input.autocomplete-input"),
             mesto,
             "Obec"
         )
@@ -108,7 +108,7 @@ class ProfilZZ(BasePage):
             )
 
         self._safe_fill(
-            self.page.locator("#adresaTPUlica").get_by_role("textbox"),
+            self.page.locator("#adresaTPUlica input.autocomplete-input"),
             ulica,
             "Ulica"
         )

@@ -8,7 +8,7 @@ class LogoutPage(BasePage):
 
     def _click_on_menu(self):
         self._safe_click(
-            self.page.get_by_role("link", name="Rozbaliť profilové menu"),
+            self.page.locator(".profil-dropdown"),
             "Rozbaliť profilové menu"
         )
 

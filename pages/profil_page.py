@@ -12,7 +12,7 @@ class ProfilPage(BasePage):
         self.page.wait_for_load_state("networkidle")
 
         self._safe_click(
-            self.page.get_by_role("link", name="Rozbaliť profilové menu"),
+            self.page.locator(".profil-dropdown"),
             "Rozbaliť profilové menu"
         )
         self._safe_click(
@@ -82,7 +82,7 @@ class ProfilPage(BasePage):
 
     def change_school(self, school_name: str):
         self._safe_click(
-            self.page.get_by_role("textbox", name="Škola"),
+            self.page.get_by_role("combobox", name="Škola"),
             "Škola"
         )
         self._safe_click(

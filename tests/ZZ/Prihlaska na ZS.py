@@ -94,12 +94,10 @@ def test_prihlaska_na_ZS(page: Page, person_data) -> None:
         "V súhrnnom prehľade chýba rodný jazyk."
     ).to_contain_text("slovenský")
 
-    # Pôvodne: "Cibulková 8/63, 03687, Brusno, ..." - po prechode na register adries
-    # sa vyberá adresa z číselníka a súhrn ju zobrazuje bez obce.
     expect(
         page.locator("#suhrnny-prehlad"),
         "V súhrnnom prehľade chýba adresa dieťaťa."
-    ).to_contain_text("Prvej SNR 33/23, 90701, Slovenská republika")
+    ).to_contain_text("Prvej SNR 33/23, 90701, Myjava, Slovenská republika")
 
     expect(
         page.locator("#suhrnny-prehlad"),
@@ -154,7 +152,7 @@ def test_prihlaska_na_ZS(page: Page, person_data) -> None:
     expect(
         page.locator("#zastupcovia"), #zastupovcovia
         "V prehľade zákonných zástupcov chýba adresa."
-    ).to_contain_text("Prvej SNR 33/23, 90701, Slovenská republika")
+    ).to_contain_text("Prvej SNR 33/23, 90701, Myjava, Slovenská republika")
 
     expect(
         page.locator("#zastupcovia"),
