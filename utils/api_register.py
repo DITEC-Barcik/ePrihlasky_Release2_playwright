@@ -1,8 +1,80 @@
+import email as email_lib
+import imaplib
 import random
 import re
 import string
 import time
 from playwright.sync_api import Playwright
+
+from utils.mail_helper import Mail
+
+
+class GmailAliasClient:
+    """Jednorazove adresy cez Gmail plus-aliasy - vsetko chodi do jednej schranky."""
+
+    IMAP_HOST = "imap.gmail.com"
+    POLL_SECONDS = 10
+    SCAN_LAST_MESSAGES = 20
+
+    def __init__(self, address: str, password: str):
+        self.address = address
+        self.password = password
+
+    @staticmethod
+    def _random_string(length: int = 8) -> str:
+        chars = string.ascii_lowercase + string.digits
+        return "".join(random.choice(chars) for _ in range(length))
+
+    def create_alias(self) -> str:
+        local, domain = self.address.split("@")
+        return f"{local}+{self._random_string()}@{domain}"
+
+    def wait_for_registration_link(self, alias: str, timeout_seconds: int = 180) -> str:
+        deadline = time.time() + timeout_seconds
+
+        while time.time() < deadline:
+            text = self._find_message_text(alias)
+            if text:
+                # Portal posiela HTML aj v textovej casti, URL preto konci na < > " '
+                match = re.search(r"https?://[^\s\"'<>]+", text)
+                if match:
+                    return match.group(0).rstrip("].,")
+            time.sleep(self.POLL_SECONDS)
+
+        raise AssertionError(
+            f"Registracny e-mail pre {alias} neprisiel do {timeout_seconds} s."
+        )
+
+    def _find_message_text(self, alias: str) -> str | None:
+        # Hlavicky kontrolujeme sami - Gmail IMAP search s plus-aliasmi nie je spolahlivy.
+        mail = imaplib.IMAP4_SSL(self.IMAP_HOST, 993)
+        try:
+            mail.login(self.address, self.password)
+            if mail.select("INBOX")[0] != "OK":
+                return None
+
+            status, data = mail.search(None, "ALL")
+            if status != "OK" or not data[0]:
+                return None
+
+            for message_id in reversed(data[0].split()[-self.SCAN_LAST_MESSAGES:]):
+                status, fetched = mail.fetch(message_id, "(RFC822)")
+                if status != "OK" or not fetched or not isinstance(fetched[0], tuple):
+                    continue
+
+                message = email_lib.message_from_bytes(fetched[0][1])
+                recipients = " ".join(
+                    str(message.get(header, "")) for header in ("To", "Delivered-To", "X-Original-To")
+                )
+                if alias.lower() in recipients.lower():
+                    return Mail.extract_text(message)
+
+            return None
+        finally:
+            try:
+                mail.logout()
+            except Exception:
+                pass
 
 
 class MailTmClient:

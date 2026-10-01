@@ -28,42 +28,42 @@ class Registracia(BasePage):
         op: str
     ):
         self._safe_fill(
-            self.page.get_by_role("textbox", name="Zopakujte e-mail ("),
+            self.page.locator("#input-zopakujte-email"),
             mail,
             "Zopakujte e-mail"
         )
         self._safe_fill(
-            self.page.get_by_role("textbox", name="E-mail (prihlasovacie meno) *", exact=True),
+            self.page.locator("#input-email"),
             mail,
             "E-mail (prihlasovacie meno)"
         )
         self._safe_fill(
-            self.page.get_by_role("textbox", name="Heslo *", exact=True),
+            self.page.locator("#input-heslo"),
             heslo,
             "Heslo"
         )
         self._safe_fill(
-            self.page.get_by_role("textbox", name="Zopakujte heslo *"),
+            self.page.locator("#input-zopakujte-heslo"),
             heslo,
             "Zopakujte heslo"
         )
         self._safe_fill(
-            self.page.get_by_role("textbox", name="Meno *"),
+            self.page.locator("#input-meno"),
             meno,
             "Meno"
         )
         self._safe_fill(
-            self.page.get_by_role("textbox", name="Priezvisko *"),
+            self.page.locator("#input-priezvisko"),
             priezvisko,
             "Priezvisko"
         )
         self._safe_fill(
-            self.page.get_by_role("textbox", name="Číslo občianskeho preukazu *"),
+            self.page.locator("#input-cislo-op"),
             op,
             "Číslo občianskeho preukazu"
         )
         self._safe_fill(
-            self.page.get_by_role("textbox", name="Rodné číslo *"),
+            self.page.locator("#input-rodne-cislo"),
             rc,
             "Rodné číslo"
         )
