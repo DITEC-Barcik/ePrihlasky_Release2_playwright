@@ -232,17 +232,16 @@ def test_porovnaj_body_pdf_vizualne():
     compare_pdf_visual(
         actual_pdf="data/downloads/bodyDownloaded.pdf",
         expected_pdf="data/BodyPredloha.pdf",
-        # Masky pokrývajú celé odseky, nielen premenlivé hodnoty - dĺžka mena
-        # a dátumu mení zalomenie riadkov a tým posúva zvyšok odseku.
+        # Dĺžka mena žiaka mení počet riadkov odseku a tým posúva všetok text
+        # pod ním, preto je zamaskovaná celá dynamická časť strany.
+        # Obsah kontroluje test_porovnaj_body_pdf_textovo.
         masks={
             0: [
-                (110, 255, 470, 293),    # oslovenie zákonného zástupcu
-                (110, 303, 1075, 364),   # odsek s menom žiaka a dátumom narodenia
-                (110, 439, 475, 474),    # prístupový kód
+                (105, 300, 1085, 740),
             ],
         },
         threshold=0.05,
-        max_diff_pixels=5000,
+        max_diff_pixels=500,
         name_prefix="body_pdf",
         zoom=2.0,
     )
@@ -269,16 +268,14 @@ def test_porovnaj_pozvanka_pdf_vizualne():
     compare_pdf_visual(
         actual_pdf="data/downloads/pozvankaDownloaded.pdf",
         expected_pdf="data/PozvánkaPredloha.pdf",
+        # To isté ako pri bodoch - obsah kontroluje test_porovnaj_pozvanka_pdf_textovo.
         masks={
             0: [
-                (320, 300, 610, 340),
-                (200, 440, 500, 500),
-                (270, 250, 460, 290),
-                (400, 400, 450, 450),
+                (105, 300, 1085, 790),
             ],
         },
         threshold=0.05,
-        max_diff_pixels=5000,
+        max_diff_pixels=500,
         name_prefix="pozvanka_pdf",
         zoom=2.0,
     )
