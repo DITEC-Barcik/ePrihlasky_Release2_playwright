@@ -82,8 +82,9 @@ class Odbory(BasePage):
             self.page.locator(".checkmark").first,
             "Prvá voľba checkboxu"
         )
+        # Modal je v kontajneri s aria-hidden="true", takže role lokátory ho nenájdu.
         self._safe_click(
-            self.page.get_by_role("button", name="Pridať odbor/y"),
+            self.page.locator("button.btn-pridat-odbory:visible"),
             "Pridať odbor/y"
         )
 
@@ -93,7 +94,7 @@ class Odbory(BasePage):
             "Upraviť"
         )
         self._safe_fill(
-            self.page.get_by_role("textbox", name="Kapacita odboru *"),
+            self.page.locator("#input-modalUpravitOdborKapacitaOdboruInput"),
             self.KAPACITA_1_KOLO,
             "Kapacita odboru"
         )
@@ -120,16 +121,18 @@ class Odbory(BasePage):
             "Duálne vzdelávanie"
         )
         self._safe_fill(
-            self.page.get_by_role("textbox", name="IČO zamestnávateľa"),
+            self.page.locator("#input-modalUpravitOdborIcoZamestnavatelaInput"),
             self.ICO_ZAMESTNAVATELA,
             "IČO zamestnávateľa"
         )
+        # Tlačidlo sa sprístupní až po opustení poľa s IČO.
+        self.page.locator("#input-modalUpravitOdborIcoZamestnavatelaInput").press("Tab")
         self._safe_click(
-            self.page.get_by_role("link", name="Pridať"),
+            self.page.locator("#btn-pridat-ico"),
             "Pridať zamestnávateľa"
         )
         self._safe_fill(
-            self.page.get_by_role("textbox", name="Kapacita pre duálne vzdelá"),
+            self.page.locator("#input-modalUpravitOdborDualneVzdelavanieKapacitaInput"),
             self.KAPACITA_DUAL,
             "Kapacita pre duálne vzdelávanie"
         )
