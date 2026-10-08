@@ -1,5 +1,13 @@
+from datetime import date
+
 from playwright.sync_api import Page
 from pages.base_page import BasePage
+
+
+def _zaciatok_najblizsieho_skolskeho_roka() -> date:
+    dnes = date.today()
+    rok = dnes.year if dnes < date(dnes.year, 9, 1) else dnes.year + 1
+    return date(rok, 9, 1)
 
 
 class PrihlaskaMS(BasePage):
@@ -8,9 +16,8 @@ class PrihlaskaMS(BasePage):
     ADRESA = "Prvej SNR 33/23"
     ADRESA_LABEL = "Prvej SNR 33/23, 90701, Myjava, Myjava"
 
-    DATUM_DEN = "7"
-    DATUM_MESIAC = "9"
-    DATUM_ROK = "2026"
+    # Portal poziadavku s datumom v minulosti odmietne, preto sa pocita za behu.
+    DATUM_PRIJATIA = _zaciatok_najblizsieho_skolskeho_roka()
     POZNAMKA = "ŠVVP"
 
     ZZ_MENO = "Fero"
@@ -139,17 +146,17 @@ class PrihlaskaMS(BasePage):
         )
         self._safe_fill(
             self.page.get_by_role("textbox", name="Deň"),
-            self.DATUM_DEN,
+            str(self.DATUM_PRIJATIA.day),
             "Deň"
         )
         self._safe_fill(
             self.page.get_by_role("textbox", name="Mesiac"),
-            self.DATUM_MESIAC,
+            str(self.DATUM_PRIJATIA.month),
             "Mesiac"
         )
         self._safe_fill(
             self.page.get_by_role("textbox", name="Rok"),
-            self.DATUM_ROK,
+            str(self.DATUM_PRIJATIA.year),
             "Rok"
         )
         self._safe_fill(

@@ -22,7 +22,7 @@ def test_zmeny_udajov_ZZ_IFO(page: Page, email_account_picker) -> None:
     profil.otvorit_profil()
 
     aktualna_adresa = (page.locator("#profil-adresa").text_content() or "").strip()
-    if aktualna_adresa == "Záštepy 98, 06578, Trebatice, Slovenská republika":
+    if aktualna_adresa == "Záštepy 32/98, 06578, Trebatice, Slovenská republika":
         stat = "Slovenská re"
         mesto = "semero"
         ulica = "kuri"
@@ -80,7 +80,7 @@ def test_zmeny_udajov_ZZ_IFO(page: Page, email_account_picker) -> None:
         expect(
             page.locator("#profil-adresa"),
             "Adresa zákonného zástupcu sa po zmene na Trebatice nezobrazila správne."
-        ).to_contain_text("Záštepy 98, 06578, Trebatice, Slovenská republika")
+        ).to_contain_text("Záštepy 32/98, 06578, Trebatice, Slovenská republika")
 
     expect(
         page.locator("#profil-rodneCislo"),

@@ -88,9 +88,16 @@ class Odbory(BasePage):
             "Pridať odbor/y"
         )
 
+    def _open_odbor_akcie(self):
+        # Akcie riadku su skryte v rozbalovacej ponuke; bez posunu do zobrazenia sa neotvori.
+        akcie = self.page.locator(".odbor-akcie-button").first
+        akcie.scroll_into_view_if_needed()
+        self._safe_click(akcie, "Vybrať - akcie odboru")
+
     def aktualizuj_odbory_1_kolo(self):
+        self._open_odbor_akcie()
         self._safe_click(
-            self.page.get_by_role("button", name="Upraviť"),
+            self.page.locator(".btn-edit").first,
             "Upraviť"
         )
         self._safe_fill(
@@ -154,8 +161,9 @@ class Odbory(BasePage):
         )
 
     def odstran_odbor_1_kolo(self):
+        self._open_odbor_akcie()
         self._safe_click(
-            self.page.get_by_role("button", name="Odstrániť"),
+            self.page.locator(".btn-delete").first,
             "Odstrániť"
         )
         self._safe_click(

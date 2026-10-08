@@ -71,7 +71,11 @@ def _expect_ms_summary(page: Page, data, helper: Helper) -> None:
         "V súhrnnom prehľade chýba adresa dieťaťa."
     )
     _expect_text(summary, "Celodennú výchovu a vzdelávanie", "V súhrnnom prehľade chýba typ výchovy.")
-    _expect_text(summary, "07.09.2026", "V súhrnnom prehľade chýba požadovaný dátum prijatia.")
+    _expect_text(
+        summary,
+        PrihlaskaMS.DATUM_PRIJATIA.strftime("%d.%m.%Y"),
+        "V súhrnnom prehľade chýba požadovaný dátum prijatia."
+    )
     _expect_text(summary, "ŠVVP", "V súhrnnom prehľade chýba poznámka ŠVVP.")
 
 
