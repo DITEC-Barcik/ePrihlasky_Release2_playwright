@@ -1,4 +1,4 @@
-from playwright.sync_api import Page
+from playwright.sync_api import Page, expect
 from pages.base_page import BasePage
 import re
 
@@ -88,18 +88,28 @@ class Odbory(BasePage):
             "Pridať odbor/y"
         )
 
-    def _open_odbor_akcie(self):
-        # Akcie riadku su skryte v rozbalovacej ponuke; bez posunu do zobrazenia sa neotvori.
+    def _klikni_akciu_odboru(self, selector: str, nazov: str):
+        # Zoznam sa po ulozeni prekresluje a otvorenu ponuku pritom zatvori,
+        # preto sa otvorenie aj klik na polozku opakuju spolu.
+        self.page.wait_for_load_state("networkidle")
         akcie = self.page.locator(".odbor-akcie-button").first
-        akcie.scroll_into_view_if_needed()
-        self._safe_click(akcie, "Vybrať - akcie odboru")
+        polozka = self.page.locator(selector).first
+
+        for _ in range(3):
+            try:
+                akcie.scroll_into_view_if_needed()
+                akcie.click()
+                expect(polozka).to_be_visible(timeout=5000)
+                polozka.click(timeout=5000)
+                return
+            except Exception:
+                continue
+
+        self.screenshot(f"error_akcia_odboru_{self._sanitize_filename(nazov)}")
+        raise AssertionError(f'Akciu "{nazov}" na odbore sa nepodarilo vykonať.')
 
     def aktualizuj_odbory_1_kolo(self):
-        self._open_odbor_akcie()
-        self._safe_click(
-            self.page.locator(".btn-edit").first,
-            "Upraviť"
-        )
+        self._klikni_akciu_odboru(".btn-edit", "Upraviť")
         self._safe_fill(
             self.page.locator("#input-modalUpravitOdborKapacitaOdboruInput"),
             self.KAPACITA_1_KOLO,
@@ -132,12 +142,17 @@ class Odbory(BasePage):
             self.ICO_ZAMESTNAVATELA,
             "IČO zamestnávateľa"
         )
-        # Tlačidlo sa sprístupní až po opustení poľa s IČO.
+        # Tlacidlo sa spristupni az po opusteni pola s ICO.
         self.page.locator("#input-modalUpravitOdborIcoZamestnavatelaInput").press("Tab")
         self._safe_click(
             self.page.locator("#btn-pridat-ico"),
             "Pridať zamestnávateľa"
         )
+        # Pocas dohladavania firmy prekryva modal spinner, ktory blokuje dalsie kliky.
+        expect(
+            self.page.locator("#zamestnavatelia-container"),
+            "Zamestnávateľ sa po pridaní IČO nezobrazil."
+        ).to_contain_text(self.ICO_ZAMESTNAVATELA, timeout=60000)
         self._safe_fill(
             self.page.locator("#input-modalUpravitOdborDualneVzdelavanieKapacitaInput"),
             self.KAPACITA_DUAL,
@@ -161,11 +176,7 @@ class Odbory(BasePage):
         )
 
     def odstran_odbor_1_kolo(self):
-        self._open_odbor_akcie()
-        self._safe_click(
-            self.page.locator(".btn-delete").first,
-            "Odstrániť"
-        )
+        self._klikni_akciu_odboru(".btn-delete", "Odstrániť")
         self._safe_click(
             self.page.locator("button").filter(has_text=re.compile(r"^Odstrániť$")),
             "Potvrdiť odstránenie"
