@@ -5,7 +5,8 @@ from pages.base_page import BasePage
 class KofliktSS(BasePage):
     KOLO_2 = "2"
     ODBOR_2_KOLO = "2b3813df-fbe6-41ce-be28-0efc6dfaca83"
-    ODBOR_1_KOLO = "fa97e1ee-cf77-4880-853a-5972261cdb4c"
+    # Nová konfigurácia portálu (šk. rok 2027/2028); pôvodne "fa97e1ee-cf77-4880-853a-5972261cdb4c".
+    ODBOR_1_KOLO = "456570b0-6b5d-48ea-98a2-01751dca1a0a"
 
     def __init__(self, page: Page):
         super().__init__(page)
@@ -27,7 +28,7 @@ class KofliktSS(BasePage):
     def _zobraz_prihlasku_v_konflikte(self):
         self.page.wait_for_load_state("networkidle")
         self._safe_click(
-            self.page.get_by_role("button", name="Zobraziť").nth(1),
+            self.page.get_by_role("button", name="Zobraziť").first,
             "Zobraziť prihlášku v konflikte"
         )
         self.page.wait_for_load_state("networkidle")

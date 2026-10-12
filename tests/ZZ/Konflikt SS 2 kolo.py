@@ -147,7 +147,7 @@ def test_vyriesenie_konfliktu_2_kolo(page: Page) -> None:
 
     meno = page.locator("#dietaMeno").text_content()
     priezvisko = page.locator("#dietaPriezvisko").text_content()
-    identifikator = page.locator("div.prihlaskaIdentifikator").text_content()
+    identifikator = page.locator(".prihlaskaIdentifikator").text_content()
     datum_narodenia = page.locator("#dietaDatumNarodenia").text_content()
 
     konflikt.click_on_vyzva_na_vyriesenie_konfliktu()
@@ -274,7 +274,7 @@ def test_vyriesenie_konfliktu_2_kolo(page: Page) -> None:
         "V sekcii duplicitných prihlášok chýba potvrdenie o vyriešení konfliktu."
     )
     _expect_text(
-        page.locator("div.stavPrihlasky.badge"),
+        page.locator(".stavPrihlasky"),
         "V spracovaní",
         "Po vyriešení konfliktu nemá prihláška očakávaný stav 'V spracovaní'."
     )

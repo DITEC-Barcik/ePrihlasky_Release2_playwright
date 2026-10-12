@@ -13,6 +13,8 @@ NO_ROLE_MESSAGE = (
     "(správa používateľov) - bez priradenej role nie je možné spracovávať prihlášky."
 )
 
+SKOLA = "910021624"
+
 
 def _require_env(name: str) -> str:
     value = os.getenv(name)
@@ -24,8 +26,8 @@ def _require_env(name: str) -> str:
 @pytest.fixture
 def credentials():
     return {
-        "riad_username": _require_env("EPRIHLASKY_SEC_RIADITEL_USERNAME"),
-        "riad_password": _require_env("EPRIHLASKY_SEC_RIADITEL_PASSWORD"),
+        "riad_username": _require_env("EPRIHLASKY_RIADITEL_USERNAME"),
+        "riad_password": _require_env("EPRIHLASKY_RIADITEL_PASSWORD"),
         "admin_username": _require_env("EPRIHLASKY_ADMIN_USERNAME"),
         "admin_password": _require_env("EPRIHLASKY_ADMIN_PASSWORD"),
         "spracovatel_username": _require_env("EPRIHLASKY_SPRACOVATEL_USERNAME"),
@@ -112,7 +114,7 @@ def test_pridaj_rolu(page: Page, credentials) -> None:
     login.login_as_riaditel(
         credentials["riad_username"],
         credentials["riad_password"],
-        "910020859"
+        SKOLA
     )
 
     role.otvor_spravu_pouzivatelov()
@@ -155,7 +157,7 @@ def test_odstran_rolu(page: Page, credentials) -> None:
     login.login_as_riaditel(
         credentials["riad_username"],
         credentials["riad_password"],
-        "910020859"
+        SKOLA
     )
 
     role.otvor_spravu_pouzivatelov()

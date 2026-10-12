@@ -5,7 +5,8 @@ from pages.base_page import BasePage
 class PapierovaPrihlaskaSS(BasePage):
     KOLO_2 = "2"
     ODBOR_2_KOLO = "2b3813df-fbe6-41ce-be28-0efc6dfaca83"
-    ODBOR_1_KOLO = "fa97e1ee-cf77-4880-853a-5972261cdb4c"
+    # Nová konfigurácia portálu (šk. rok 2027/2028); pôvodne "fa97e1ee-cf77-4880-853a-5972261cdb4c".
+    ODBOR_1_KOLO = "456570b0-6b5d-48ea-98a2-01751dca1a0a"
 
     KRAJINA = "slovenska rep"
     KRAJINA_LABEL = "Slovenská republika"
@@ -78,14 +79,14 @@ class PapierovaPrihlaskaSS(BasePage):
         )
         self.page.wait_for_load_state("networkidle")
         self._safe_click(
-            self.page.locator("#btn-vytvorit-prihlasku"),
+            self.page.locator("#btn-vytvorit-prihlasku:visible"),
             "Vytvoriť prihlášku"
         )
 
     def click_on_pridaj_prihlasku_1_kolo(self):
         self.page.wait_for_load_state("networkidle")
         self._safe_click(
-            self.page.locator("#btn-vytvorit-prihlasku"),
+            self.page.locator("#btn-vytvorit-prihlasku:visible"),
             "Vytvoriť prihlášku - 1. kolo"
         )
 
@@ -95,7 +96,7 @@ class PapierovaPrihlaskaSS(BasePage):
             "Dieťa má rodné číslo"
         )
         self._safe_fill(
-            self.page.get_by_role("textbox", name="Rodné číslo *"),
+            self.page.locator("#input-rodneCislo"),
             rc,
             "Rodné číslo"
         )
@@ -107,17 +108,17 @@ class PapierovaPrihlaskaSS(BasePage):
         self._potvrd_existujucu_prihlasku_ak_treba()
 
         self._safe_fill(
-            self.page.get_by_role("textbox", name="Meno *"),
+            self.page.locator("#input-krstneMeno"),
             meno,
             "Meno"
         )
         self._safe_fill(
-            self.page.get_by_role("textbox", name="Priezvisko *"),
+            self.page.locator("#input-priezvisko"),
             priezvisko,
             "Priezvisko"
         )
         self._safe_fill(
-            self.page.get_by_role("textbox", name="Rodné priezvisko"),
+            self.page.locator("#input-rodnePriezvisko"),
             priezvisko,
             "Rodné priezvisko"
         )
@@ -158,17 +159,17 @@ class PapierovaPrihlaskaSS(BasePage):
         )
 
         self._safe_fill(
-            self.page.get_by_role("textbox", name="Súpisné číslo"),
+            self.page.locator("#input-adresaTPSupisneCislo"),
             self.SUPISNE_CISLO,
             "Súpisné číslo"
         )
         self._safe_fill(
-            self.page.get_by_role("textbox", name="Orientačné číslo *"),
+            self.page.locator("#input-adresaTPOrientacneCislo"),
             self.ORIENTACNE_CISLO,
             "Orientačné číslo"
         )
         self._safe_fill(
-            self.page.get_by_role("textbox", name="PSČ *"),
+            self.page.locator("#input-adresaTPPSC"),
             self.PSC,
             "PSČ"
         )
@@ -230,27 +231,32 @@ class PapierovaPrihlaskaSS(BasePage):
 
     def step_4_ZZ(self):
         self._safe_fill(
-            self.page.get_by_role("textbox", name="Meno *"),
+            self.page.locator("#input-zastupca1Meno"),
             self.ZZ_MENO,
             "Meno zákonného zástupcu"
         )
         self._safe_fill(
-            self.page.get_by_role("textbox", name="Priezvisko *"),
+            self.page.locator("#input-zastupca1Priezvisko"),
             self.ZZ_PRIEZVISKO,
             "Priezvisko zákonného zástupcu"
         )
         self._safe_fill(
-            self.page.get_by_role("textbox", name="Rodné číslo *"),
+            self.page.locator("#input-zastupca1RodnePriezvisko"),
+            self.ZZ_PRIEZVISKO,
+            "Rodné priezvisko zákonného zástupcu"
+        )
+        self._safe_fill(
+            self.page.locator("#input-zastupca1RodneCislo"),
             self.ZZ_RC,
             "Rodné číslo zákonného zástupcu"
         )
         self._safe_fill(
-            self.page.get_by_role("textbox", name="E-mail"),
+            self.page.locator("#input-zastupca1Email"),
             self.ZZ_EMAIL,
             "E-mail zákonného zástupcu"
         )
         self._safe_fill(
-            self.page.get_by_role("textbox", name="Telefónne číslo *"),
+            self.page.locator("#input-zastupca1Telefon"),
             self.ZZ_TELEFON,
             "Telefónne číslo zákonného zástupcu"
         )
@@ -267,7 +273,7 @@ class PapierovaPrihlaskaSS(BasePage):
 
     def step_5_navsteva_ZS(self):
         self._safe_fill(
-            self.page.get_by_role("textbox", name="EDUID základnej školy *"),
+            self.page.locator("#input-eduidSkolyInput"),
             self.EDUID_ZS,
             "EDUID základnej školy"
         )
@@ -281,7 +287,7 @@ class PapierovaPrihlaskaSS(BasePage):
             "Ročník"
         )
         self._safe_fill(
-            self.page.get_by_role("textbox", name="Trieda *"),
+            self.page.locator("#input-triedaInput"),
             self.TRIEDA,
             "Trieda"
         )
@@ -291,9 +297,9 @@ class PapierovaPrihlaskaSS(BasePage):
             "Rok školskej dochádzky"
         )
         self._safe_fill(
-            self.page.get_by_role("textbox", name="Názov základnej školy *", exact=True),
+            self.page.locator("#vyucovaciJazykVZakladnejSkoleSKAutocomplete input.autocomplete-input"),
             "slovenský",
-            "Názov základnej školy"
+            "Vyučovací jazyk v základnej škole"
         )
         self._safe_click(
             self.page.locator("#vyucovaciJazykVZakladnejSkoleSKAutocomplete").get_by_text("slovenský", exact=True),
@@ -353,7 +359,7 @@ class PapierovaPrihlaskaSS(BasePage):
             "Pridať súťaž"
         )
         self._safe_fill(
-            self.page.get_by_role("textbox", name="Názov súťaže *"),
+            self.page.locator("#input-modalNazovSutazeText"),
             self.SUTAZ_NAZOV,
             "Názov súťaže"
         )
@@ -400,22 +406,22 @@ class PapierovaPrihlaskaSS(BasePage):
 
     def step_9_ostatne_udaje(self, den: str, mesiac: str, rok: str):
         self._safe_fill(
-            self.page.get_by_role("textbox", name="Deň"),
+            self.page.locator("#input-datumPodaniaPrihlaskyDen"),
             den,
             "Deň"
         )
         self._safe_fill(
-            self.page.get_by_role("textbox", name="Mesiac"),
+            self.page.locator("#input-datumPodaniaPrihlaskyMesiac"),
             mesiac,
             "Mesiac"
         )
         self._safe_fill(
-            self.page.get_by_role("textbox", name="Rok"),
+            self.page.locator("#input-datumPodaniaPrihlaskyRok"),
             rok,
             "Rok"
         )
         self._safe_fill(
-            self.page.get_by_role("textbox", name="Poznámka školy:"),
+            self.page.locator("#textarea-OUPoznamkaText"),
             self.POZNAMKA_SKOLY,
             "Poznámka školy"
         )
