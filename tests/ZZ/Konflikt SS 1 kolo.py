@@ -159,14 +159,14 @@ def test_vytvorenie_konfliktu_na_SS_1_kolo(page: Page, person_data) -> None:
 
 
 @pytest.mark.regres1kolo
-def test_vyriesenie_konfliktu_1_kolo(page: Page) -> None:
+def test_vyriesenie_konfliktu_1_kolo(page: Page, person_data) -> None:
     login = LoginPage(page)
     mail = Mail()
     helper = Helper()
     konflikt = KofliktSS(page)
 
     login.login_as_riaditel(username_riad, password_riad, "910021624")
-    konflikt.najdi_prihlasku_v_konflikte_1_kolo()
+    konflikt.najdi_prihlasku_v_konflikte_1_kolo(person_data.meno, person_data.priezvisko)
 
     conflict_panel = page.locator("#info-panel-red-prihlaska-v-konflikte-riad-ss")
     _expect_text(
@@ -201,7 +201,7 @@ def test_vyriesenie_konfliktu_1_kolo(page: Page) -> None:
 
     meno = page.locator("#dietaMeno").text_content()
     priezvisko = page.locator("#dietaPriezvisko").text_content()
-    identifikator = page.locator("div.prihlaskaIdentifikator").text_content()
+    identifikator = re.search(r"Identifikátor prihlášky\s*(P-\d{4}-\d+)", detail.inner_text()).group(1)
     datum_narodenia = page.locator("#dietaDatumNarodenia").text_content()
 
     konflikt.click_on_vyzva_na_vyriesenie_konfliktu()
@@ -297,7 +297,7 @@ def test_vyriesenie_konfliktu_1_kolo(page: Page) -> None:
         "V detaile duplicity chýba informácia o vyriešenom konflikte."
     )
     _expect_text(
-        page.locator("div.stavPrihlasky.badge"),
+        detail,
         "V spracovaní",
         "Po vyriešení konfliktu nemá aktívna prihláška stav 'V spracovaní'."
     )

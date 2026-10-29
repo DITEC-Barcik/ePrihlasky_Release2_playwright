@@ -22,20 +22,14 @@ def test_zmeny_udajov_ZZ_IFO(page: Page, email_account_picker) -> None:
     profil.otvorit_profil()
 
     aktualna_adresa = (page.locator("#profil-adresa").text_content() or "").strip()
-    if aktualna_adresa == "Záštepy 32/98, 06578, Trebatice, Slovenská republika":
-        stat = "Slovenská re"
-        mesto = "semero"
-        ulica = "kuri"
-        sup_cislo = ""
-        or_cislo = "12"
-        psc = "85476"
+    if "Prvej SNR" in aktualna_adresa:
+        adresa = "Kúria 105/3"
+        adresa_label = "Kúria 105/3, 92205, Chtelnica, Piešťany"
+        ocakavana_adresa = "Kúria 105/3, 92205, Chtelnica, Slovenská republika"
     else:
-        stat = "Slovenská re"
-        mesto = "trebatic"
-        ulica = "zast"
-        sup_cislo = "32"
-        or_cislo = "98"
-        psc = "06578"
+        adresa = "Prvej SNR 33/23"
+        adresa_label = "Prvej SNR 33/23, 90701, Myjava, Myjava"
+        ocakavana_adresa = "Prvej SNR 33/23, 90701, Myjava, Slovenská republika"
 
     expect(
         page.locator("#profil-dn"),
@@ -62,7 +56,7 @@ def test_zmeny_udajov_ZZ_IFO(page: Page, email_account_picker) -> None:
     )
     profil.overit_kod_mailu(kod)
 
-    profil.zmenit_adresu(stat, mesto, ulica, sup_cislo, or_cislo, psc)
+    profil.zmenit_adresu(adresa, adresa_label)
 
     expect(
         page.locator("#profil-nastavenieZZ"),
@@ -71,16 +65,10 @@ def test_zmeny_udajov_ZZ_IFO(page: Page, email_account_picker) -> None:
 
     profil.otvorit_profil()
 
-    if mesto == "semero":
-        expect(
-            page.locator("#profil-adresa"),
-            "Adresa zákonného zástupcu sa po zmene na Semerovo nezobrazila správne."
-        ).to_contain_text("Kúria 12, 85476, Semerovo, Slovenská republika")
-    else:
-        expect(
-            page.locator("#profil-adresa"),
-            "Adresa zákonného zástupcu sa po zmene na Trebatice nezobrazila správne."
-        ).to_contain_text("Záštepy 32/98, 06578, Trebatice, Slovenská republika")
+    expect(
+        page.locator("#profil-adresa"),
+        "Adresa zákonného zástupcu sa po zmene nezobrazila správne."
+    ).to_contain_text(ocakavana_adresa)
 
     expect(
         page.locator("#profil-rodneCislo"),

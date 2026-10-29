@@ -143,7 +143,7 @@ def test_prihlaska_na_SS_1_kolo(page: Page, person_data) -> None:
     expect(
         page.locator("#skoly"),
         "V sekcii školy chýba názov odboru."
-    ).to_contain_text("zlievač -3 ročné")
+    ).to_contain_text("zlievač")
 
     expect(
         page.locator("#skoly"),

@@ -23,7 +23,7 @@ def _expect_visible(locator, message: str):
 
 def _expect_ms_suhrn(page: Page, data, helper: Helper, den: str, mesiac: str, rok: str) -> None:
     _expect_text(page.locator("#suhrnny-prehlad"), "Súhrnný prehľad", "Chýba nadpis Súhrnný prehľad.")
-    _expect_text(page.locator("#ziadostSkolskyRok"), "2026 / 2027", "Chýba školský rok.")
+    _expect_text(page.locator("#ziadostSkolskyRok"), "2027/2028", "Chýba školský rok.")
     _expect_text(page.locator("#ziadostDatumPodania"), f"{den}.{mesiac}.{rok}", "Chýba dátum podania.")
     _expect_text(page.locator("#poznamkaSkoly"), ":)", "Chýba poznámka školy.")
     _expect_text(page.locator("#ziadostIdentifikator"), "-", "Chýba identifikátor prihlášky.")
@@ -50,12 +50,12 @@ def _expect_ms_suhrn(page: Page, data, helper: Helper, den: str, mesiac: str, ro
     _expect_text(page.locator("#dietaInyMaterinskyJazykSuhrn"), "-", "Chýba iný materinský jazyk.")
     _expect_text(
         page.locator("#dietaAdresaTrvalehoPobytuSuhrn"),
-        "Miksáthova 8/635, 02845, Kordíky, Slovenská republika",
+        "Prvej SNR 33/23, 90701, Myjava, Slovenská republika",
         "Chýba trvalý pobyt dieťaťa."
     )
     _expect_text(
         page.locator("#dietaAdresaObvyklehoPobytuSuhrn"),
-        "Miksáthova 8/635, 02845, Kordíky, Slovenská republika",
+        "Prvej SNR 33/23, 90701, Myjava, Slovenská republika",
         "Chýba obvyklý pobyt dieťaťa."
     )
     _expect_text(page.locator("#dpDietataMsCelodennaVychova"), "Celodennú výchovu a vzdelávanie", "Chýba typ výchovy.")
@@ -82,7 +82,7 @@ def _expect_ms_zastupcovia(page: Page) -> None:
     _expect_text(page.locator("#zakonnyZastupcaDatumNarodenia"), "01.02.1986", "Chýba dátum narodenia zákonného zástupcu.")
     _expect_text(
         page.locator("#zakonnyZastupcaAdresaBydliska"),
-        "Miksáthova 8/635, 02845, Kordíky, Slovenská republika",
+        "Prvej SNR 33/23, 90701, Myjava, Slovenská republika",
         "Chýba adresa zákonného zástupcu."
     )
     _expect_text(page.locator("#zakonnyZastupcaEmail"), "katalontest987@gmail.com", "Chýba e-mail zákonného zástupcu.")

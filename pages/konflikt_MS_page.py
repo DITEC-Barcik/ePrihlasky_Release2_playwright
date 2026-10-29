@@ -16,7 +16,7 @@ class KonfliktMS(BasePage):
 
     def odoslat_vyzvu_na_vyriesenie_konfliktu(self):
         self._safe_fill(
-            self.page.get_by_role("textbox", name="Sprievodná správa: *"),
+            self.page.get_by_role("textbox", name="Sprievodná správa:"),
             self.DEFAULT_VYZVA_TEXT,
             "Sprievodná správa k výzve"
         )
@@ -33,7 +33,7 @@ class KonfliktMS(BasePage):
 
     def odoslat_vyriesenie_konfliktu(self, text: str):
         self._safe_fill(
-            self.page.get_by_role("textbox", name="Sprievodná správa: *"),
+            self.page.get_by_role("textbox", name="Sprievodná správa:"),
             text,
             "Sprievodná správa k vyriešeniu konfliktu"
         )

@@ -1,8 +1,11 @@
-from playwright.sync_api import Page
+from playwright.sync_api import Page, expect
 from pages.base_page import BasePage
 
 
 class ProfilZZ(BasePage):
+    KRAJINA = "slovenská rep"
+    KRAJINA_LABEL = "Slovenská republika"
+
     def __init__(self, page: Page):
         super().__init__(page)
 
@@ -23,6 +26,9 @@ class ProfilZZ(BasePage):
             self.page.get_by_role("link", name="Upraviť údaje"),
             "Upraviť údaje"
         )
+        # Page loads data asynchronously and re-disables the save button when done
+        expect(self.page.locator("#input-telefon")).not_to_have_value("", timeout=60000)
+        expect(self.page.locator("button.btn-ulozit:visible")).to_be_disabled(timeout=60000)
 
     def otvorit_profil(self):
         self._otvorit_profilove_menu()
@@ -34,6 +40,7 @@ class ProfilZZ(BasePage):
             cislo,
             "Telefónne číslo"
         )
+        self.page.locator("#input-telefon").press("Tab")
 
     def click_on_ulozit_zmeny(self):
         self._safe_click(
@@ -67,78 +74,36 @@ class ProfilZZ(BasePage):
             "Overiť"
         )
 
-    def zmenit_adresu(
-        self,
-        krajina: str,
-        mesto: str,
-        ulica: str,
-        scislo: str,
-        ocislo: str,
-        psc: str
-    ):
-        self._safe_check(
-            self.page.locator("#trvalyPobytRadio_option_1"),
-            "Iná korešpondenčná adresa"
-        )
+    def zmenit_adresu(self, adresa: str, adresa_label: str):
+        # Page reloads after e-mail verification; wait until its async init finishes
+        self.page.wait_for_load_state("networkidle")
+        expect(self.page.locator("#input-telefon")).not_to_have_value("", timeout=60000)
+        expect(self.page.locator("button.btn-ulozit:visible")).to_be_disabled(timeout=60000)
+        pridat_adresu = self.page.locator(".pridat-adresu-dalej")
+        ina_adresa = self.page.locator("label[for='trvalyPobytRadio_option_1']")
+        expect(pridat_adresu.or_(ina_adresa).filter(visible=True).first).to_be_visible(timeout=60000)
+        if pridat_adresu.is_visible():
+            self._safe_click(pridat_adresu, "Pridať adresu")
+        else:
+            self._safe_click(ina_adresa, "Iná korešpondenčná adresa")
 
         self._safe_fill(
             self.page.locator("#adresaTPKrajina input.autocomplete-input"),
-            krajina,
+            self.KRAJINA,
             "Krajina"
         )
         self._safe_click(
-            self.page.get_by_text("Slovenská republika", exact=True),
-            "Slovenská republika"
-        )
-
-        self._safe_fill(
-            self.page.locator("#adresaTPObec input.autocomplete-input"),
-            mesto,
-            "Obec"
-        )
-        if mesto == "semero":
-            self._safe_click(
-                self.page.get_by_text("Semerovo (Nové Zámky)"),
-                "Semerovo (Nové Zámky)"
-            )
-        else:
-            self._safe_click(
-                self.page.get_by_text("Trebatice (Piešťany)"),
-                "Trebatice (Piešťany)"
-            )
-
-        self._safe_fill(
-            self.page.locator("#adresaTPUlica input.autocomplete-input"),
-            ulica,
-            "Ulica"
-        )
-        if ulica == "kuri":
-            self._safe_click(
-                self.page.get_by_text("Kúria"),
-                "Kúria"
-            )
-        else:
-            self._safe_click(
-                self.page.get_by_text("Záštepy", exact=True),
-                "Záštepy"
-            )
-
-        if scislo == "32":
-            self._safe_fill(
-                self.page.locator("#input-adresaTPSupisneCislo"),
-                scislo,
-                "Súpisné číslo"
-            )
-
-        self._safe_fill(
-            self.page.locator("#input-adresaTPOrientacneCislo"),
-            ocislo,
-            "Orientačné číslo"
+            self.page.locator("#adresaTPKrajina").get_by_text(self.KRAJINA_LABEL, exact=True),
+            self.KRAJINA_LABEL
         )
         self._safe_fill(
-            self.page.locator("#input-adresaTPPSC"),
-            psc,
-            "PSČ"
+            self.page.locator("#adresaTPAdresaRA input.autocomplete-input"),
+            adresa,
+            "Adresa"
+        )
+        self._safe_click(
+            self.page.locator("#adresaTPAdresaRA").get_by_text(adresa_label, exact=True),
+            adresa_label
         )
         self._safe_click(
             self.page.locator("#ulozit-adresu"),

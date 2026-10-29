@@ -91,7 +91,7 @@ class Prijimacky(BasePage):
     def click_on_uprava_prihlasky(self):
         self._open_vybrat_menu()
         self._safe_click(
-            self.page.get_by_role("link", name="Upraviť"),
+            self.page.get_by_role("button", name="Upraviť").filter(visible=True).first,
             "Upraviť"
         )
 
@@ -148,7 +148,7 @@ class Prijimacky(BasePage):
     def click_on_akcia_odoslat_pozvanky(self):
         self._open_akcie_menu()
         self._safe_click(
-            self.page.locator("a").filter(has_text="Odoslať pozvánky").last,
+            self.page.locator("a, button").filter(has_text="Odoslať pozvánky").filter(visible=True).last,
             "Odoslať pozvánky"
         )
 
@@ -186,7 +186,7 @@ class Prijimacky(BasePage):
     def click_on_akcia_plny_pocet_bodov(self):
         self._open_akcie_menu()
         self._safe_click(
-            self.page.locator("a").filter(has_text="Odoslať správu o plnom počte bodov").last,
+            self.page.locator("a, button").filter(has_text="Odoslať správu o plnom počte bodov").filter(visible=True).last,
             "Odoslať správu o plnom počte bodov"
         )
 
@@ -204,7 +204,7 @@ class Prijimacky(BasePage):
         self._open_vybrat_menu()
         with self.page.expect_download() as download_info:
             self._safe_click(
-                self.page.locator("a").filter(has_text="Stiahnuť PDF - Pozvánka").last,
+                self.page.locator("a, button").filter(has_text="Stiahnuť PDF - Pozvánka").filter(visible=True).last,
                 "Stiahnuť PDF - Pozvánka"
             )
         download = download_info.value
@@ -214,7 +214,7 @@ class Prijimacky(BasePage):
         self._open_vybrat_menu()
         with self.page.expect_download() as download_info:
             self._safe_click(
-                self.page.locator("a").filter(has_text="Stiahnuť PDF - Správa o bodoch").last,
+                self.page.locator("a, button").filter(has_text="Stiahnuť PDF - Správa o bodoch").filter(visible=True).last,
                 "Stiahnuť PDF - Správa o bodoch"
             )
         download = download_info.value

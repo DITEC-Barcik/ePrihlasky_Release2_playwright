@@ -5,13 +5,8 @@ from pages.base_page import BasePage
 class PapierovaPrihlaskaMS(BasePage):
     KRAJINA = "slovenská rep"
     KRAJINA_LABEL = "Slovenská republika"
-    OBEC = "Kord"
-    OBEC_LABEL = "Kordíky (Banská Bystrica)"
-    ULICA = "Miksa"
-    ULICA_LABEL = "Miksáthova"
-    SUPISNE_CISLO = "8"
-    ORIENTACNE_CISLO = "635"
-    PSC = "02845"
+    ADRESA = "Prvej SNR 33/23"
+    ADRESA_LABEL = "Prvej SNR 33/23, 90701, Myjava, Myjava"
 
     DATUM_NASTUP_DEN = "1"
     DATUM_NASTUP_MESIAC = "9"
@@ -55,7 +50,7 @@ class PapierovaPrihlaskaMS(BasePage):
     def click_on_pridaj_prihlasku(self):
         self.page.wait_for_load_state("networkidle")
         self._safe_click(
-            self.page.get_by_role("button", name="Pridať prihlášku"),
+            self.page.locator("#btn-vytvorit-prihlasku:visible"),
             "Pridať prihlášku"
         )
 
@@ -65,7 +60,7 @@ class PapierovaPrihlaskaMS(BasePage):
             "Dieťa má rodné číslo"
         )
         self._safe_fill(
-            self.page.get_by_role("textbox", name="Rodné číslo *"),
+            self.page.locator("#input-rodneCislo"),
             rc,
             "Rodné číslo"
         )
@@ -76,17 +71,17 @@ class PapierovaPrihlaskaMS(BasePage):
         self.page.wait_for_load_state("networkidle")
 
         self._safe_fill(
-            self.page.get_by_role("textbox", name="Meno *"),
+            self.page.locator("#input-krstneMeno"),
             meno,
             "Meno"
         )
         self._safe_fill(
-            self.page.get_by_role("textbox", name="Priezvisko *"),
+            self.page.locator("#input-priezvisko"),
             priezvisko,
             "Priezvisko"
         )
         self._safe_fill(
-            self.page.get_by_role("textbox", name="Rodné priezvisko"),
+            self.page.locator("#input-rodnePriezvisko"),
             priezvisko,
             "Rodné priezvisko"
         )
@@ -107,39 +102,17 @@ class PapierovaPrihlaskaMS(BasePage):
         )
 
         self._safe_fill(
-            self.page.locator("#adresaTPObec input.autocomplete-input"),
-            self.OBEC,
-            "Obec"
+            self.page.locator("#adresaTPAdresaRA input.autocomplete-input"),
+            self.ADRESA,
+            "Adresa"
         )
         self._safe_click(
-            self.page.locator("#adresaTPObec").get_by_text(self.OBEC_LABEL, exact=True),
-            "Kordíky (Banská Bystrica)"
+            self.page.locator("#adresaTPAdresaRA").get_by_text(self.ADRESA_LABEL, exact=True),
+            self.ADRESA_LABEL
         )
-
-        self._safe_fill(
-            self.page.locator("#adresaTPUlica input.autocomplete-input"),
-            self.ULICA,
-            "Ulica"
-        )
-        self._safe_click(
-            self.page.locator("#adresaTPUlica").get_by_text(self.ULICA_LABEL, exact=True),
-            "Miksáthova"
-        )
-
-        self._safe_fill(
-            self.page.get_by_role("textbox", name="Súpisné číslo"),
-            self.SUPISNE_CISLO,
-            "Súpisné číslo"
-        )
-        self._safe_fill(
-            self.page.get_by_role("textbox", name="Orientačné číslo *"),
-            self.ORIENTACNE_CISLO,
-            "Orientačné číslo"
-        )
-        self._safe_fill(
-            self.page.get_by_role("textbox", name="PSČ *"),
-            self.PSC,
-            "PSČ"
+        self._safe_check(
+            self.page.locator("#zvycajnaAdresaradio_option_0"),
+            "Obvyklý pobyt - zhodný s trvalým"
         )
 
         self._click_dalej("Ďalej - osobné údaje")
@@ -182,27 +155,27 @@ class PapierovaPrihlaskaMS(BasePage):
 
     def step_4_ZZ(self):
         self._safe_fill(
-            self.page.get_by_role("textbox", name="Meno *"),
+            self.page.locator("#input-zastupca1Meno"),
             self.ZZ_MENO,
             "Meno zákonného zástupcu"
         )
         self._safe_fill(
-            self.page.get_by_role("textbox", name="Priezvisko *"),
+            self.page.locator("#input-zastupca1Priezvisko"),
             self.ZZ_PRIEZVISKO,
             "Priezvisko zákonného zástupcu"
         )
         self._safe_fill(
-            self.page.get_by_role("textbox", name="Rodné číslo *"),
+            self.page.locator("#input-zastupca1RodneCislo"),
             self.ZZ_RC,
             "Rodné číslo zákonného zástupcu"
         )
         self._safe_fill(
-            self.page.get_by_role("textbox", name="E-mail"),
+            self.page.locator("#input-zastupca1Email"),
             self.ZZ_EMAIL,
             "E-mail zákonného zástupcu"
         )
         self._safe_fill(
-            self.page.get_by_role("textbox", name="Telefónne číslo *"),
+            self.page.locator("#input-zastupca1Telefon"),
             self.ZZ_TELEFON,
             "Telefónne číslo zákonného zástupcu"
         )
@@ -210,7 +183,9 @@ class PapierovaPrihlaskaMS(BasePage):
         self.page.wait_for_timeout(1000)
 
         self._click_dalej("Ďalej - zákonný zástupca")
-        if self.page.get_by_role("textbox", name="Telefónne číslo *").is_visible():
+        try:
+            self.page.locator("#input-zastupca1Telefon").wait_for(state="hidden", timeout=5000)
+        except Exception:
             self._click_dalej("Ďalej - zákonný zástupca opakovanie")
 
     def step_5_prilohy(self):

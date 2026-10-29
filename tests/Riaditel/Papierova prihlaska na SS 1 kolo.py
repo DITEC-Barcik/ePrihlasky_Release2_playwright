@@ -23,7 +23,7 @@ def _expect_visible(locator, message: str):
 
 def _expect_summary_ss_1_kolo(page: Page, data, helper: Helper, den: str, mesiac: str, rok: str) -> None:
     _expect_text(page.locator("#ziadostIdentifikator"), "-", "V súhrne chýba identifikátor prihlášky pred odoslaním.")
-    _expect_text(page.locator("#ziadostSkolskyRok"), "2026 / 2027", "V súhrne chýba školský rok.")
+    _expect_text(page.locator("#ziadostSkolskyRok"), "2027/2028", "V súhrne chýba školský rok.")
     _expect_text(page.locator("#ziadostDatumPodania"), f"{den}.{mesiac}.{rok}", "V súhrne chýba dátum podania.")
     _expect_text(page.locator("#ziadostSposobPodania"), "-", "V súhrne chýba spôsob podania pred odoslaním.")
     _expect_text(page.locator("#poznamkaSkoly"), "*-*", "V súhrne chýba poznámka školy.")
@@ -50,7 +50,7 @@ def _expect_summary_ss_1_kolo(page: Page, data, helper: Helper, den: str, mesiac
     _expect_text(page.locator("#dietaInyMaterinskyJazykSuhrn"), "-", "V súhrne chýba údaj o inom materinskom jazyku.")
     _expect_text(
         page.locator("#dietaAdresaTrvalehoPobytuSuhrn"),
-        "Korčekova 12/45, 89516, Palín, Slovenská republika",
+        "Prvej SNR 33/23, 90701, Myjava, Slovenská republika",
         "V súhrne chýba adresa trvalého pobytu žiaka."
     )
 
@@ -63,7 +63,7 @@ def _expect_summary_ss_1_kolo(page: Page, data, helper: Helper, den: str, mesiac
 def _expect_school_section_ss(page: Page) -> None:
     _expect_text(page.locator("#skoly"), "910021624", "V sekcii školy chýba EDUID školy.")
     _expect_text(page.locator("#skoly"), "Stredná škola pre AT", "V sekcii školy chýba názov školy.")
-    _expect_text(page.locator("#skoly"), "zlievač -3 ročné", "V sekcii školy chýba názov odboru.")
+    _expect_text(page.locator("#skoly"), "zlievač", "V sekcii školy chýba názov odboru.")
     _expect_text(page.locator("#skoly"), "Netalentový", "V sekcii školy chýba typ odboru.")
     _expect_text(page.locator("#skoly"), "1. termín", "V sekcii školy chýba termín prijímacej skúšky.")
     _expect_text(page.locator("#skoly"), "slovenský", "V sekcii školy chýba vyučovací jazyk.")
@@ -75,13 +75,13 @@ def _expect_guardian_section_ss(page: Page) -> None:
     _expect_text(page.locator("#zastupcovia"), "Osobné údaje zákonného zástupcu č. 1", "Chýba hlavička zákonného zástupcu č. 1.")
     _expect_text(page.locator("#zakonnyZastupcaMeno"), "Demeter", "Chýba meno zákonného zástupcu.")
     _expect_text(page.locator("#zakonnyZastupcaPriezvisko"), "Varga", "Chýba priezvisko zákonného zástupcu.")
-    _expect_text(page.locator("#zakonnyZastupcaRodnePriezvisko"), "-", "Chýba rodné priezvisko zákonného zástupcu.")
+    _expect_text(page.locator("#zakonnyZastupcaRodnePriezvisko"), "Varga", "Chýba rodné priezvisko zákonného zástupcu.")
     _expect_text(page.locator("#zakonnyZastupcaRodneCislo"), "840303/7269", "Chýba rodné číslo zákonného zástupcu.")
     _expect_text(page.locator("#zastupcovia"), "-", "Chýba očakávaný znak '-' v sekcii zástupcov.")
     _expect_text(page.locator("#zakonnyZastupcaDatumNarodenia"), "03.03.1984", "Chýba dátum narodenia zákonného zástupcu.")
     _expect_text(
         page.locator("#zakonnyZastupcaAdresaBydliska"),
-        "Korčekova 12/45, 89516, Palín, Slovenská republika",
+        "Prvej SNR 33/23, 90701, Myjava, Slovenská republika",
         "Chýba adresa zákonného zástupcu."
     )
     _expect_text(page.locator("#zakonnyZastupcaEmail"), "katalontest987@gmail.com", "Chýba e-mail zákonného zástupcu.")
@@ -109,7 +109,7 @@ def _expect_results_and_competitions_ss(page: Page) -> None:
 
     _expect_text(page.locator("#sutaze-suhrn"), "Súťaž", "V sekcii súťaží chýba nadpis alebo typ položky.")
     _expect_text(page.locator("#sutaze-suhrn"), "Preteky v kosení", "V sekcii súťaží chýba názov súťaže.")
-    _expect_text(page.locator("#sutaze-suhrn"), "2. miesto - Krajská úroveň", "V sekcii súťaží chýba umiestnenie.")
+    _expect_text(page.locator("#sutaze-suhrn"), "2. miesto - krajská", "V sekcii súťaží chýba umiestnenie.")
     _expect_text(page.locator("#sutaze-suhrn"), "Súťaže zručnosti", "V sekcii súťaží chýba kategória súťaže.")
     _expect_text(page.locator("#sutaze-suhrn"), "Školský rok: 2024/2025", "V sekcii súťaží chýba školský rok.")
 

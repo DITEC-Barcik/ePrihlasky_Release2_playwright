@@ -5,17 +5,13 @@ from pages.base_page import BasePage
 class PapierovaPrihlaskaSS(BasePage):
     KOLO_2 = "2"
     ODBOR_2_KOLO = "2b3813df-fbe6-41ce-be28-0efc6dfaca83"
-    ODBOR_1_KOLO = "fa97e1ee-cf77-4880-853a-5972261cdb4c"
+    # Nová konfigurácia portálu (šk. rok 2027/2028); pôvodne "fa97e1ee-cf77-4880-853a-5972261cdb4c".
+    ODBOR_1_KOLO = "456570b0-6b5d-48ea-98a2-01751dca1a0a"
 
     KRAJINA = "slovenska rep"
     KRAJINA_LABEL = "Slovenská republika"
-    OBEC = "pali"
-    OBEC_LABEL = "Palín (Michalovce)"
-    ULICA = "korce"
-    ULICA_LABEL = "Korčekova"
-    SUPISNE_CISLO = "12"
-    ORIENTACNE_CISLO = "45"
-    PSC = "89516"
+    ADRESA = "Prvej SNR 33/23"
+    ADRESA_LABEL = "Prvej SNR 33/23, 90701, Myjava, Myjava"
 
     SVVP_POZNAMKA = "-_-"
 
@@ -78,14 +74,14 @@ class PapierovaPrihlaskaSS(BasePage):
         )
         self.page.wait_for_load_state("networkidle")
         self._safe_click(
-            self.page.locator("#btn-vytvorit-prihlasku"),
+            self.page.locator("#btn-vytvorit-prihlasku:visible"),
             "Vytvoriť prihlášku"
         )
 
     def click_on_pridaj_prihlasku_1_kolo(self):
         self.page.wait_for_load_state("networkidle")
         self._safe_click(
-            self.page.locator("#btn-vytvorit-prihlasku"),
+            self.page.locator("#btn-vytvorit-prihlasku:visible"),
             "Vytvoriť prihlášku - 1. kolo"
         )
 
@@ -95,7 +91,7 @@ class PapierovaPrihlaskaSS(BasePage):
             "Dieťa má rodné číslo"
         )
         self._safe_fill(
-            self.page.get_by_role("textbox", name="Rodné číslo *"),
+            self.page.locator("#input-rodneCislo"),
             rc,
             "Rodné číslo"
         )
@@ -107,17 +103,17 @@ class PapierovaPrihlaskaSS(BasePage):
         self._potvrd_existujucu_prihlasku_ak_treba()
 
         self._safe_fill(
-            self.page.get_by_role("textbox", name="Meno *"),
+            self.page.locator("#input-krstneMeno"),
             meno,
             "Meno"
         )
         self._safe_fill(
-            self.page.get_by_role("textbox", name="Priezvisko *"),
+            self.page.locator("#input-priezvisko"),
             priezvisko,
             "Priezvisko"
         )
         self._safe_fill(
-            self.page.get_by_role("textbox", name="Rodné priezvisko"),
+            self.page.locator("#input-rodnePriezvisko"),
             priezvisko,
             "Rodné priezvisko"
         )
@@ -138,39 +134,13 @@ class PapierovaPrihlaskaSS(BasePage):
         )
 
         self._safe_fill(
-            self.page.locator("#adresaTPObec input.autocomplete-input"),
-            self.OBEC,
-            "Obec"
+            self.page.locator("#adresaTPAdresaRA input.autocomplete-input"),
+            self.ADRESA,
+            "Adresa"
         )
         self._safe_click(
-            self.page.locator("#adresaTPObec").get_by_text(self.OBEC_LABEL, exact=True),
-            "Palín (Michalovce)"
-        )
-
-        self._safe_fill(
-            self.page.locator("#adresaTPUlica input.autocomplete-input"),
-            self.ULICA,
-            "Ulica"
-        )
-        self._safe_click(
-            self.page.locator("#adresaTPUlica").get_by_text(self.ULICA_LABEL, exact=True),
-            "Korčekova"
-        )
-
-        self._safe_fill(
-            self.page.get_by_role("textbox", name="Súpisné číslo"),
-            self.SUPISNE_CISLO,
-            "Súpisné číslo"
-        )
-        self._safe_fill(
-            self.page.get_by_role("textbox", name="Orientačné číslo *"),
-            self.ORIENTACNE_CISLO,
-            "Orientačné číslo"
-        )
-        self._safe_fill(
-            self.page.get_by_role("textbox", name="PSČ *"),
-            self.PSC,
-            "PSČ"
+            self.page.locator("#adresaTPAdresaRA").get_by_text(self.ADRESA_LABEL, exact=True),
+            self.ADRESA_LABEL
         )
 
         self._click_dalej("Ďalej - osobné údaje")
@@ -217,9 +187,10 @@ class PapierovaPrihlaskaSS(BasePage):
             self.page.get_by_role("link", name="Pridať odbor mojej školy"),
             "Pridať odbor mojej školy - 1. kolo"
         )
+        pridat = self.page.get_by_role("button", name="Pridať do prihlášky")
         self._safe_click(
-            self.page.get_by_role("button", name="Pridať do prihlášky").nth(1),
-            "Pridať do prihlášky - 1. kolo"
+            self.page.locator("div, li, tr").filter(has_text="2285H00").filter(has=pridat).last.locator(pridat),
+            "Pridať do prihlášky - 1. kolo (zlievač)"
         )
         self._safe_click(
             self.page.get_by_role("button", name="Pridať odbory a odísť"),
@@ -230,27 +201,32 @@ class PapierovaPrihlaskaSS(BasePage):
 
     def step_4_ZZ(self):
         self._safe_fill(
-            self.page.get_by_role("textbox", name="Meno *"),
+            self.page.locator("#input-zastupca1Meno"),
             self.ZZ_MENO,
             "Meno zákonného zástupcu"
         )
         self._safe_fill(
-            self.page.get_by_role("textbox", name="Priezvisko *"),
+            self.page.locator("#input-zastupca1Priezvisko"),
             self.ZZ_PRIEZVISKO,
             "Priezvisko zákonného zástupcu"
         )
         self._safe_fill(
-            self.page.get_by_role("textbox", name="Rodné číslo *"),
+            self.page.locator("#input-zastupca1RodnePriezvisko"),
+            self.ZZ_PRIEZVISKO,
+            "Rodné priezvisko zákonného zástupcu"
+        )
+        self._safe_fill(
+            self.page.locator("#input-zastupca1RodneCislo"),
             self.ZZ_RC,
             "Rodné číslo zákonného zástupcu"
         )
         self._safe_fill(
-            self.page.get_by_role("textbox", name="E-mail"),
+            self.page.locator("#input-zastupca1Email"),
             self.ZZ_EMAIL,
             "E-mail zákonného zástupcu"
         )
         self._safe_fill(
-            self.page.get_by_role("textbox", name="Telefónne číslo *"),
+            self.page.locator("#input-zastupca1Telefon"),
             self.ZZ_TELEFON,
             "Telefónne číslo zákonného zástupcu"
         )
@@ -267,7 +243,7 @@ class PapierovaPrihlaskaSS(BasePage):
 
     def step_5_navsteva_ZS(self):
         self._safe_fill(
-            self.page.get_by_role("textbox", name="EDUID základnej školy *"),
+            self.page.locator("#input-eduidSkolyInput"),
             self.EDUID_ZS,
             "EDUID základnej školy"
         )
@@ -281,7 +257,7 @@ class PapierovaPrihlaskaSS(BasePage):
             "Ročník"
         )
         self._safe_fill(
-            self.page.get_by_role("textbox", name="Trieda *"),
+            self.page.locator("#input-triedaInput"),
             self.TRIEDA,
             "Trieda"
         )
@@ -291,9 +267,9 @@ class PapierovaPrihlaskaSS(BasePage):
             "Rok školskej dochádzky"
         )
         self._safe_fill(
-            self.page.get_by_role("textbox", name="Názov základnej školy *", exact=True),
+            self.page.locator("#vyucovaciJazykVZakladnejSkoleSKAutocomplete input.autocomplete-input"),
             "slovenský",
-            "Názov základnej školy"
+            "Vyučovací jazyk v základnej škole"
         )
         self._safe_click(
             self.page.locator("#vyucovaciJazykVZakladnejSkoleSKAutocomplete").get_by_text("slovenský", exact=True),
@@ -353,7 +329,7 @@ class PapierovaPrihlaskaSS(BasePage):
             "Pridať súťaž"
         )
         self._safe_fill(
-            self.page.get_by_role("textbox", name="Názov súťaže *"),
+            self.page.locator("#input-modalNazovSutazeText"),
             self.SUTAZ_NAZOV,
             "Názov súťaže"
         )
@@ -400,22 +376,22 @@ class PapierovaPrihlaskaSS(BasePage):
 
     def step_9_ostatne_udaje(self, den: str, mesiac: str, rok: str):
         self._safe_fill(
-            self.page.get_by_role("textbox", name="Deň"),
+            self.page.locator("#input-datumPodaniaPrihlaskyDen"),
             den,
             "Deň"
         )
         self._safe_fill(
-            self.page.get_by_role("textbox", name="Mesiac"),
+            self.page.locator("#input-datumPodaniaPrihlaskyMesiac"),
             mesiac,
             "Mesiac"
         )
         self._safe_fill(
-            self.page.get_by_role("textbox", name="Rok"),
+            self.page.locator("#input-datumPodaniaPrihlaskyRok"),
             rok,
             "Rok"
         )
         self._safe_fill(
-            self.page.get_by_role("textbox", name="Poznámka školy:"),
+            self.page.locator("#textarea-OUPoznamkaText"),
             self.POZNAMKA_SKOLY,
             "Poznámka školy"
         )
@@ -436,7 +412,7 @@ class PapierovaPrihlaskaSS(BasePage):
         )
         self.page.wait_for_load_state("networkidle")
         self._safe_fill(
-            self.page.get_by_role("textbox", name="Vyhľadávanie v prihláškach"),
+            self.page.get_by_role("textbox", name="Vyhľadávanie v meno, priezvisko"),
             f"{meno} {priezvisko}",
             "Vyhľadávanie v prihláškach"
         )
@@ -453,7 +429,7 @@ class PapierovaPrihlaskaSS(BasePage):
         )
         self.page.wait_for_load_state("networkidle")
         self._safe_fill(
-            self.page.get_by_role("textbox", name="Vyhľadávanie v prihláškach"),
+            self.page.get_by_role("textbox", name="Vyhľadávanie v meno, priezvisko"),
             f"{meno} {priezvisko}",
             "Vyhľadávanie v prihláškach"
         )
