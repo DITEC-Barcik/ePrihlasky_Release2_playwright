@@ -46,13 +46,15 @@ class PrilohyMS(BasePage):
             "Áno, odvolať"
         )
 
-    def pridat_prilohu_MS(self):
+    def pridat_prilohu_MS(self, identifikator: str):
         self.page.wait_for_load_state("networkidle")
         self.page.wait_for_timeout(3000)
 
         self._safe_click(
-            self.page.get_by_role("link", name="Pridať prílohy").first,
-            "Pridať prílohy"
+            self.page.locator("div.card_prihlasky_content")
+            .filter(has_text=identifikator.strip())
+            .get_by_role("link", name="Pridať prílohy"),
+            f"Pridať prílohy - {identifikator.strip()}"
         )
         self._safe_click(
             self.page.locator("span").filter(has_text="add").first,

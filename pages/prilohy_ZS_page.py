@@ -46,10 +46,12 @@ class PrilohyZS(BasePage):
             "Potvrdiť odvolanie žiadosti"
         )
 
-    def pridat_prilohu(self):
+    def pridat_prilohu(self, identifikator: str):
         self._safe_click(
-            self.page.get_by_role("link", name="Pridať prílohy").first,
-            "Pridať prílohy"
+            self.page.locator("div.card_prihlasky_content")
+            .filter(has_text=identifikator.strip())
+            .get_by_role("link", name="Pridať prílohy"),
+            f"Pridať prílohy - {identifikator.strip()}"
         )
 
         self._safe_click(

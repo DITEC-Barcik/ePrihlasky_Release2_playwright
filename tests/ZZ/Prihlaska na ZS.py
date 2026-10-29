@@ -308,7 +308,7 @@ def test_doplnenie_prilohy_na_ZS(page: Page, person_data) -> None:
         "Nahrajte prílohyRiaditeľ základnej školy požaduje doplnenie príloh. Pridanie prílohy nájdete v stĺpci Akcia."
     )
 
-    prilohy.pridat_prilohu()
+    prilohy.pridat_prilohu(identifikator)
 
     expect(
         page.locator("#pridat-prilohy"),

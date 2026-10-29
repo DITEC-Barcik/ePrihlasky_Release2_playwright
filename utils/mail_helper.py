@@ -9,9 +9,13 @@ from email.utils import parsedate_to_datetime
 
 MAX_WAIT_SECONDS = 180
 POLLING_INTERVAL_SECONDS = 15
+ARRIVAL_CLOCK_TOLERANCE_SECONDS = 1
+RECENT_MESSAGES_TO_CHECK = 20
 
 
 class Mail:
+    _returned_uids: set[bytes] = set()
+
     @staticmethod
     def extract_text(message: Message) -> str | None:
         if message.is_multipart():
@@ -55,8 +59,9 @@ class Mail:
     polling_interval_seconds: int = POLLING_INTERVAL_SECONDS,) -> str | None:
         function_start_time = time.time()
         end_time = function_start_time + max_wait_seconds
+        # Arrival time instead of message count: a slow IMAP login must not hide a mail that arrived meanwhile
+        min_arrival_time = function_start_time - ARRIVAL_CLOCK_TOLERANCE_SECONDS
 
-        initial_message_count = -1
         poll_attempt = 0
 
         print("[MAIL] get_last_email_text started")
@@ -80,67 +85,70 @@ class Mail:
                 print("[MAIL] Connecting to store...")
                 mail = imaplib.IMAP4_SSL(host, 993)
                 mail.login(user, password)
-                print("[MAIL] Connected successfully")
+                print(f"[MAIL] Connected successfully in {time.time() - now:.1f} s")
 
                 status, _ = mail.select(mailbox)
                 if status != "OK":
                     print(f"[MAIL] Failed to open mailbox: {mailbox}")
                     continue
 
-                status, messages = mail.search(None, "ALL")
+                status, messages = mail.uid("search", None, "ALL")
                 if status != "OK":
                     print("[MAIL] Failed to search messages")
                     continue
 
-                email_ids = messages[0].split()
-                message_count = len(email_ids)
+                recent_uids = messages[0].split()[-RECENT_MESSAGES_TO_CHECK:]
 
-                print(f"[MAIL] Message count in {mailbox} = {message_count}")
+                for uid in reversed(recent_uids):
+                    if uid in Mail._returned_uids:
+                        continue
 
-                if initial_message_count == -1:
-                    initial_message_count = message_count
-                    print(f"[MAIL] Initial message count recorded = {initial_message_count}")
-                else:
-                    print(f"[MAIL] Initial message count = {initial_message_count}")
+                    status, date_data = mail.uid("fetch", uid, "(INTERNALDATE)")
+                    if status != "OK" or not date_data or date_data[0] is None:
+                        continue
 
-                if message_count > initial_message_count:
-                    print(f"[MAIL] New message(s) detected: {message_count - initial_message_count}")
+                    arrival = imaplib.Internaldate2tuple(date_data[0])
+                    if arrival is None:
+                        continue
 
-                    new_email_ids = email_ids[initial_message_count:]
+                    arrival_time = time.mktime(arrival)
+                    if arrival_time < min_arrival_time:
+                        # UIDs are ascending, older messages follow
+                        break
 
-                    for email_id in reversed(new_email_ids):
-                        print(f"[MAIL] Checking NEW message id = {email_id.decode()}")
+                    print(f"[MAIL] Checking message uid = {uid.decode()}, arrived {arrival_time - function_start_time:+.1f} s from start")
 
-                        status, msg_data = mail.fetch(email_id, "(RFC822)")
-                        if status != "OK":
-                            print("[MAIL] Failed to fetch message")
-                            continue
+                    status, msg_data = mail.uid("fetch", uid, "(RFC822)")
+                    if status != "OK":
+                        print("[MAIL] Failed to fetch message")
+                        continue
 
-                        raw_email = msg_data[0][1]
-                        message = email.message_from_bytes(raw_email)
+                    raw_email = msg_data[0][1]
+                    message = email.message_from_bytes(raw_email)
 
-                        try:
-                            subject = message.get("Subject", "<no subject>")
-                        except Exception:
-                            subject = "<unable to read subject>"
+                    try:
+                        subject = message.get("Subject", "<no subject>")
+                    except Exception:
+                        subject = "<unable to read subject>"
 
-                        print(f"[MAIL] Subject = {subject}")
+                    print(f"[MAIL] Subject = {subject}")
 
-                        email_text = Mail.extract_text(message)
+                    email_text = Mail.extract_text(message)
 
-                        if email_text is None:
-                            print("[MAIL] extract_text returned None")
-                            continue
+                    if email_text is None:
+                        print("[MAIL] extract_text returned None")
+                        continue
 
-                        if not email_text.strip():
-                            print("[MAIL] extract_text returned empty text")
-                            continue
+                    if not email_text.strip():
+                        print("[MAIL] extract_text returned empty text")
+                        continue
 
-                        print("[MAIL] Email text extracted successfully")
-                        print("[MAIL] Returning email text")
-                        return email_text.strip()
-                else:
-                    print("[MAIL] No new messages since function start")
+                    Mail._returned_uids.add(uid)
+                    print("[MAIL] Email text extracted successfully")
+                    print("[MAIL] Returning email text")
+                    return email_text.strip()
+
+                print("[MAIL] No new messages since function start")
 
             except Exception as e:
                 print(f"[MAIL] Exception while reading email: {e}")

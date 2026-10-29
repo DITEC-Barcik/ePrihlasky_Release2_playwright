@@ -273,7 +273,7 @@ def test_doplnenie_prilohy_na_SS_2_kolo(page: Page) -> None:
     _expect_text(page.locator("#moje-prihlasky"), "Nahrajte prílohy", "V sekcii 'Moje prihlášky' chýba výzva na nahratie príloh.")
     _expect_text(page.locator("#moje-prihlasky"), "Nahrajte prílohyRiaditeľ strednej školy požaduje doplnenie príloh. Pridanie prílohy nájdete v stĺpci Akcia.", "V sekcii 'Moje prihlášky' chýba vysvetľujúci text k prílohám.")
 
-    priloha.nahrat_prilohu()
+    priloha.nahrat_prilohu(identifikator)
     _expect_text(page.locator("#pridat-prilohy"), "Dokumenty ste úspešne nahrali", "Po nahratí príloh sa nezobrazila úspešná hláška.")
     _expect_text(page.locator("#pridat-prilohy"), "Vaša prihláška bude čoskoro posúdená. Ďakujeme za trpezlivosť.", "Po nahratí príloh chýba ďakovná správa.")
 

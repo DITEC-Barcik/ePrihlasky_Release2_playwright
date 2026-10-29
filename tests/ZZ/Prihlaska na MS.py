@@ -265,7 +265,7 @@ def test_doplnenie_prilohy_na_MS(page: Page, person_data) -> None:
         "V zozname mojich prihlášok chýba informácia o požadovanom doplnení príloh."
     )
 
-    prilohy.pridat_prilohu_MS()
+    prilohy.pridat_prilohu_MS(identifikator)
 
     prijatie_prilohy = mail.get_last_email_text("imap.gmail.com", mailuser, mailpw)
     prijatie_prilohy = helper.cleanup_email_text(prijatie_prilohy)

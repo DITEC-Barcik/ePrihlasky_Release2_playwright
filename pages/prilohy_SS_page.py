@@ -118,12 +118,14 @@ class PrilohySS(BasePage):
             "Potvrdiť odvolanie žiadosti"
         )
 
-    def nahrat_prilohu(self):
+    def nahrat_prilohu(self, identifikator: str):
         self.page.wait_for_load_state("networkidle")
 
         self._safe_click(
-            self.page.get_by_role("link", name="Pridať prílohy").first,
-            "Pridať prílohy"
+            self.page.locator("div.card_prihlasky_content")
+            .filter(has_text=identifikator.strip())
+            .get_by_role("link", name="Pridať prílohy"),
+            f"Pridať prílohy - {identifikator.strip()}"
         )
         self._safe_click(
             self.page.get_by_text("Čestné vyhlásenie zákonného zástupcu Nenahrané Nenahrané Nahrané"),
