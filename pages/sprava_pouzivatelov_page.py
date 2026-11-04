@@ -50,6 +50,16 @@ class SpravaPouzivatelov(BasePage):
 
     def otvor_profil(self):
         self.page.wait_for_load_state("networkidle")
+        # Mandatory contact details modal for users without saved phone/e-mail
+        kontakt_modal = self.page.locator("#kontrola-kontaktnych-udajov-modal")
+        if kontakt_modal.is_visible():
+            self._safe_fill(kontakt_modal.locator("#input-kontrolaTelefon"), "+421999888777", "Telefónne číslo")
+            self._safe_fill(kontakt_modal.locator("#input-kontrolaEmail"), "katalontest987@gmail.com", "Kontaktná e-mailová adresa")
+            self._safe_click(
+                kontakt_modal.get_by_role("button", name="Uložiť"),
+                "Uložiť kontaktné údaje"
+            )
+            kontakt_modal.wait_for(state="hidden")
         self._safe_click(
             self.page.locator(".profil-dropdown"),
             "Rozbaliť profilové menu"
@@ -59,10 +69,12 @@ class SpravaPouzivatelov(BasePage):
             "Môj profil"
         )
 
-    def click_on_odstranit(self):
+    def click_on_odstranit(self, eduid: str):
         self._safe_click(
-            self.page.locator("button").filter(has_text="Odstrániť").nth(2),
-            "Odstrániť"
+            self.page.locator(".pouzivatel-item")
+            .filter(has_text=f"EDUID: {eduid}")
+            .locator("button[data-pouzivatel-odstranit]"),
+            f"Odstrániť {eduid}"
         )
 
     def click_on_potvrdit_odstranenie(self):

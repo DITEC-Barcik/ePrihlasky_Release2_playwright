@@ -24,8 +24,8 @@ def _require_env(name: str) -> str:
 @pytest.fixture
 def credentials():
     return {
-        "riad_username": _require_env("EPRIHLASKY_SEC_RIADITEL_USERNAME"),
-        "riad_password": _require_env("EPRIHLASKY_SEC_RIADITEL_PASSWORD"),
+        "riad_username": _require_env("EPRIHLASKY_RIADITEL_USERNAME"),
+        "riad_password": _require_env("EPRIHLASKY_RIADITEL_PASSWORD"),
         "admin_username": _require_env("EPRIHLASKY_ADMIN_USERNAME"),
         "admin_password": _require_env("EPRIHLASKY_ADMIN_PASSWORD"),
         "spracovatel_username": _require_env("EPRIHLASKY_SPRACOVATEL_USERNAME"),
@@ -112,7 +112,7 @@ def test_pridaj_rolu(page: Page, credentials) -> None:
     login.login_as_riaditel(
         credentials["riad_username"],
         credentials["riad_password"],
-        "910020859"
+        "910021624"
     )
 
     role.otvor_spravu_pouzivatelov()
@@ -155,17 +155,17 @@ def test_odstran_rolu(page: Page, credentials) -> None:
     login.login_as_riaditel(
         credentials["riad_username"],
         credentials["riad_password"],
-        "910020859"
+        "910021624"
     )
 
     role.otvor_spravu_pouzivatelov()
 
-    role.click_on_odstranit()
+    role.click_on_odstranit("930593021")
     _expect_remove_dialog(page)
     role.click_on_potvrdit_odstranenie()
     _expect_user_removed_success(page)
 
-    role.click_on_odstranit()
+    role.click_on_odstranit("930593019")
     _expect_remove_dialog(page)
     role.click_on_potvrdit_odstranenie()
     _expect_user_removed_success(page)
