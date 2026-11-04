@@ -18,6 +18,8 @@ from pages.papierova_prihlaska_ZSSS_page import PapierovaPrihlaskaZSSS
 
 from pages.papierova_prihlaska_SS_page import PapierovaPrihlaskaSS
 
+ADRESA = "Prvej SNR 33/23, 90701, Myjava, Slovenská republika"
+
 
 
 username=os.getenv("EPRIHLASKY_RIADITEL_USERNAME")
@@ -70,7 +72,7 @@ def test_pridanie_papierovej_prihlasky_SS_riaditelom_ZS_2_kolo(page: Page) -> No
 
     expect(page.locator("#ziadostIdentifikator")).to_contain_text("-")
 
-    expect(page.locator("#ziadostSkolskyRok")).to_contain_text("2026 / 2027")
+    expect(page.locator("#ziadostSkolskyRok")).to_contain_text("2027/2028")
 
     expect(page.locator("#ziadostDatumPodania")).to_contain_text(den+"."+mesiac+"."+rok)
 
@@ -102,7 +104,7 @@ def test_pridanie_papierovej_prihlasky_SS_riaditelom_ZS_2_kolo(page: Page) -> No
 
     expect(page.locator("#dietaInyMaterinskyJazykSuhrn")).to_contain_text("-")
 
-    expect(page.locator("#dietaAdresaTrvalehoPobytuSuhrn")).to_contain_text("Súčovská 3/9, 65874, Debraď, Slovenská republika")
+    expect(page.locator("#dietaAdresaTrvalehoPobytuSuhrn")).to_contain_text(ADRESA)
 
     expect(page.locator("#dpZmenenaPracovnaSchopnost")).to_contain_text("Nie")
 
@@ -120,7 +122,7 @@ def test_pridanie_papierovej_prihlasky_SS_riaditelom_ZS_2_kolo(page: Page) -> No
 
     expect(page.locator("#skoly")).to_contain_text("2285H00")
 
-    expect(page.locator("#skoly")).to_contain_text("zlievač -3 ročné")
+    expect(page.locator("#skoly")).to_contain_text("zlievač")
 
     expect(page.locator("#skoly")).to_contain_text("Netalentový")
 
@@ -146,7 +148,7 @@ def test_pridanie_papierovej_prihlasky_SS_riaditelom_ZS_2_kolo(page: Page) -> No
 
     expect(page.locator("#zakonnyZastupcaDatumNarodenia")).to_contain_text("25.02.1976")
 
-    expect(page.locator("#zakonnyZastupcaAdresaBydliska")).to_contain_text("Súčovská 3/9, 65874, Debraď, Slovenská republika")
+    expect(page.locator("#zakonnyZastupcaAdresaBydliska")).to_contain_text(ADRESA)
 
     expect(page.locator("#zakonnyZastupcaEmail")).to_contain_text("katalontest987@gmail.com")
 
@@ -168,7 +170,7 @@ def test_pridanie_papierovej_prihlasky_SS_riaditelom_ZS_2_kolo(page: Page) -> No
 
     expect(page.locator("#zakonnyZastupca2DatumNarodenia")).to_contain_text("13.04.1976")
 
-    expect(page.locator("#zakonnyZastupca2AdresaBydliska")).to_contain_text("Súčovská 3/9, 65874, Debraď, Slovenská republika")
+    expect(page.locator("#zakonnyZastupca2AdresaBydliska")).to_contain_text(ADRESA)
 
     expect(page.locator("#zakonnyZastupca2Email")).to_contain_text("katalontest789@gmail.com")
 
@@ -192,7 +194,7 @@ def test_pridanie_papierovej_prihlasky_SS_riaditelom_ZS_2_kolo(page: Page) -> No
 
     expect(page.locator("#vysledky-vzdelavania-suhrn")).to_be_visible()
 
-    expect(page.locator("#sutaze-suhrn")).to_contain_text("Súťaž Ferova dvanástka Bez umiestnenia - Okresná úroveň Iné Školský rok: 2021/2022")
+    expect(page.locator("#sutaze-suhrn")).to_contain_text("Súťaž Ferova dvanástka Bez umiestnenia - okresná Iné Školský rok: 2021/2022")
 
     expect(page.locator(".panel-content-prilohy")).to_be_visible()
 
@@ -278,7 +280,7 @@ def test_pridanie_papierovej_prihlasky_SS_riaditelom_ZS_1_kolo(page: Page) -> No
 
     expect(page.locator("#ziadostIdentifikator")).to_contain_text("-")
 
-    expect(page.locator("#ziadostSkolskyRok")).to_contain_text("2026 / 2027")
+    expect(page.locator("#ziadostSkolskyRok")).to_contain_text("2027/2028")
 
     expect(page.locator("#ziadostDatumPodania")).to_contain_text(den+"."+mesiac+"."+rok)
 
@@ -310,7 +312,7 @@ def test_pridanie_papierovej_prihlasky_SS_riaditelom_ZS_1_kolo(page: Page) -> No
 
     expect(page.locator("#dietaInyMaterinskyJazykSuhrn")).to_contain_text("-")
 
-    expect(page.locator("#dietaAdresaTrvalehoPobytuSuhrn")).to_contain_text("Súčovská 3/9, 65874, Debraď, Slovenská republika")
+    expect(page.locator("#dietaAdresaTrvalehoPobytuSuhrn")).to_contain_text(ADRESA)
 
     expect(page.locator("#dpZmenenaPracovnaSchopnost")).to_contain_text("Nie")
 
@@ -328,7 +330,7 @@ def test_pridanie_papierovej_prihlasky_SS_riaditelom_ZS_1_kolo(page: Page) -> No
 
     expect(page.locator("#skoly")).to_contain_text("2285H00")
 
-    expect(page.locator("#skoly")).to_contain_text("zlievač -3 ročné")
+    expect(page.locator("#skoly")).to_contain_text("zlievač")
 
     expect(page.locator("#skoly")).to_contain_text("Netalentový")
 
@@ -354,7 +356,7 @@ def test_pridanie_papierovej_prihlasky_SS_riaditelom_ZS_1_kolo(page: Page) -> No
 
     expect(page.locator("#zakonnyZastupcaDatumNarodenia")).to_contain_text("25.02.1976")
 
-    expect(page.locator("#zakonnyZastupcaAdresaBydliska")).to_contain_text("Súčovská 3/9, 65874, Debraď, Slovenská republika")
+    expect(page.locator("#zakonnyZastupcaAdresaBydliska")).to_contain_text(ADRESA)
 
     expect(page.locator("#zakonnyZastupcaEmail")).to_contain_text("katalontest987@gmail.com")
 
@@ -376,7 +378,7 @@ def test_pridanie_papierovej_prihlasky_SS_riaditelom_ZS_1_kolo(page: Page) -> No
 
     expect(page.locator("#zakonnyZastupca2DatumNarodenia")).to_contain_text("13.04.1976")
 
-    expect(page.locator("#zakonnyZastupca2AdresaBydliska")).to_contain_text("Súčovská 3/9, 65874, Debraď, Slovenská republika")
+    expect(page.locator("#zakonnyZastupca2AdresaBydliska")).to_contain_text(ADRESA)
 
     expect(page.locator("#zakonnyZastupca2Email")).to_contain_text("katalontest789@gmail.com")
 
@@ -400,7 +402,7 @@ def test_pridanie_papierovej_prihlasky_SS_riaditelom_ZS_1_kolo(page: Page) -> No
 
     expect(page.locator("#vysledky-vzdelavania-suhrn")).to_be_visible()
 
-    expect(page.locator("#sutaze-suhrn")).to_contain_text("Súťaž Ferova dvanástka Bez umiestnenia - Okresná úroveň Iné Školský rok: 2021/2022")
+    expect(page.locator("#sutaze-suhrn")).to_contain_text("Súťaž Ferova dvanástka Bez umiestnenia - okresná Iné Školský rok: 2021/2022")
 
     expect(page.locator(".panel-content-prilohy")).to_be_visible()
 
